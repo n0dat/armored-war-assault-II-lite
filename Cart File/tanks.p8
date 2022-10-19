@@ -25,8 +25,8 @@ gamephase = 0
 
 // on ground
 on_ground = false
-	
-	// keeps track of which player is currently moving
+  
+  // keeps track of which player is currently moving
 current_player = 1	
 
 
@@ -35,46 +35,46 @@ end_turn_key = ❎
 fire_key = 🅾️
 -->8
 function _init()
-	gamephase = 1
-	palt(0, false)//draw black
-	palt(2, true)//do not draw white
-	init_players()
+  gamephase = 1
+  palt(0, false)//draw black
+  palt(2, true)//do not draw white
+  init_players()
 end
 
 function _update60()
-	if (gamephase == 1) then
-	 do_gravity()
-	 // above needs to be
-	 // re-implemented
-	 
-	 if (btn(end_turn_key, 0)) then
-	  current_player = 2
-	 end
-	 if (btn(end_turn_key, 1)) then
-	  current_player = 1
-	 end
-	 
-	 move_players(current_player)
-	else
-		
-	end
+  if (gamephase == 1) then
+   do_gravity()
+   // above needs to be
+   // re-implemented
+   
+   if (btn(end_turn_key, 0)) then
+    current_player = 2
+   end
+   if (btn(end_turn_key, 1)) then
+    current_player = 1
+   end
+   
+   move_players(current_player)
+  else
+    
+  end
 end
-	
+  
 function _draw()
-	cls()
-	map(0,0,0,0,16,16)
-	spr(2, player1.x+player1.barrelx, player1.y+player1.barrely)
-	spr(2, player2.x+player2.barrelx, player2.y+player2.barrely)
-	draw_players()
-	draw_missile()
-	print("player "..current_player.." turn", 7)
-	// debug statements
-	print("p1.x: "..player1.x, 7)
-	print("p1.y: "..player1.y, 7)
-	print("p1.angle: "..player1.angle, 7)
-	print("p2.x: "..player2.x, 7)
-	print("p2.y: "..player2.y, 7)
-	print("p2.angle: "..player2.angle, 7)
+  cls()
+  map(0,0,0,0,16,16)
+  spr(2, player1.x+player1.barrelx, player1.y+player1.barrely)
+  spr(2, player2.x+player2.barrelx, player2.y+player2.barrely)
+  draw_players()
+  draw_missile()
+  print("player "..current_player.." turn", 7)
+  // debug statements
+  print("p1.x: "..player1.x, 7)
+  print("p1.y: "..player1.y, 7)
+  print("p1.angle: "..player1.angle, 7)
+  print("p2.x: "..player2.x, 7)
+  print("p2.y: "..player2.y, 7)
+  print("p2.angle: "..player2.angle, 7)
 end
 
 function get_tile(tile_type, x, y)
@@ -125,119 +125,119 @@ function do_gravity()
 end
 
 function init_players()
-	player1.x = 15
-	player1.y = 25
-	player1.sprite = 3
-	player1.angle = 0
-	player1.facing = false //facing false means left, otherwise right
-	player1.barrelx = 7 //coordinates for end of barrel relative to top left of sprite
-	player1.barrely = 2
-	
-	player2.x = 110
-	player2.y = 25
-	player2.sprite = 19
-	player2.angle = 0
-	player2.facing = true
-	player2.barrelx = 7
-	player2.barrely = 2
-	
+  player1.x = 15
+  player1.y = 25
+  player1.sprite = 3
+  player1.angle = 0
+  player1.facing = false //facing false means left, otherwise right
+  player1.barrelx = 7 //coordinates for end of barrel relative to top left of sprite
+  player1.barrely = 2
+  
+  player2.x = 110
+  player2.y = 25
+  player2.sprite = 19
+  player2.angle = 0
+  player2.facing = true
+  player2.barrelx = 7
+  player2.barrely = 2
+  
 end
 
 function draw_players()
-	if (player1.angle < 10) then
-		player1.sprite = 4
-	elseif (player1.angle < 20) then
-		player1.sprite = 5
-	elseif (player1.angle < 30) then
-		player1.sprite = 6
-	else
-		player1.sprite = 7
-	end
-	
-	spr(player1.sprite,player1.x,player1.y, 1, 1, player1.facing) 
-	
-	if (player2.angle < 10) then
-		player2.sprite = 20
-	elseif (player2.angle < 20) then
-		player2.sprite = 21
-	elseif (player2.angle < 30) then
-		player2.sprite = 22
-	else
-		player2.sprite = 23
-	end
-	
-	spr(player2.sprite,player2.x,player2.y, 1, 1, player2.facing) 
-	
+  if (player1.angle < 10) then
+    player1.sprite = 4
+  elseif (player1.angle < 20) then
+    player1.sprite = 5
+  elseif (player1.angle < 30) then
+    player1.sprite = 6
+  else
+    player1.sprite = 7
+  end
+  
+  spr(player1.sprite,player1.x,player1.y, 1, 1, player1.facing) 
+  
+  if (player2.angle < 10) then
+    player2.sprite = 20
+  elseif (player2.angle < 20) then
+    player2.sprite = 21
+  elseif (player2.angle < 30) then
+    player2.sprite = 22
+  else
+    player2.sprite = 23
+  end
+  
+  spr(player2.sprite,player2.x,player2.y, 1, 1, player2.facing) 
+  
 end
 
 function move_players(player_id)
-	//check for horizontal movement
+  //check for horizontal movement
 if (player_id == 1) then
  p1x = player1.x
  p1y = player1.y
  
-	if (btn(➡️, 0)) then
-		p1x += 0.5
-		player1.facing = false
-		player1.barrelx = 7
-	end
-	
-	if (btn(⬅️, 0)) then
-		p1x -= 0.5
-		player1.facing = true
-		player1.barrelx = 0
-	end
-	
-	//check for vertical movment
-	if (btn(⬆️, 0)) then
-		if (player1.angle < 45) then
-			player1.angle += dbarrel
-		end
-	end
-	
-	if (btn(⬇️, 0)) then
-	 if (player1.angle > 0) then
-			player1.angle -= dbarrel
-		end
-	end
-	
-	if (can_move(p1x, p1y)) then
-	 player1.x = mid(0, p1x, 120.5)
-	 player1.y = mid(0, p1y, 127)
- 	end
+  if (btn(➡️, 0)) then
+    p1x += 0.5
+    player1.facing = false
+    player1.barrelx = 7
+  end
+  
+  if (btn(⬅️, 0)) then
+    p1x -= 0.5
+    player1.facing = true
+    player1.barrelx = 0
+  end
+  
+  //check for vertical movment
+  if (btn(⬆️, 0)) then
+    if (player1.angle < 45) then
+      player1.angle += dbarrel
+    end
+  end
+  
+  if (btn(⬇️, 0)) then
+   if (player1.angle > 0) then
+      player1.angle -= dbarrel
+    end
+  end
+  
+  if (can_move(p1x, p1y)) then
+   player1.x = mid(0, p1x, 120.5)
+   player1.y = mid(0, p1y, 127)
+   end
 
 else
  p2x = player2.x
  p2y = player2.y
  
-	if (btn(➡️, 1)) then
-		p2x += 0.5
-		player2.facing = false
-		player2.barrelx = 7
-	end
-	
-	if (btn(⬅️, 1)) then
-		p2x -= 0.5
-		player2.facing = true
-		player2.barrelx = 0
-	end
-	
-	//check for vertical movment
-	if (btn(⬆️, 1)) then
-		if (player2.angle < 45) then
-			player2.angle += dbarrel
-		end
-	end
-	
-	if (btn(⬇️, 1)) then
-	 if (player2.angle > 0) then
-			player2.angle -= dbarrel
-		end
-	end
-	
-	if (can_move(p2x, p2y)) then
-	 player2.x = mid(0, p2x, 120.5)
-	 player2.y = mid(0, p2y, 127)
+  if (btn(➡️, 1)) then
+    p2x += 0.5
+    player2.facing = false
+    player2.barrelx = 7
+  end
+  
+  if (btn(⬅️, 1)) then
+    p2x -= 0.5
+    player2.facing = true
+    player2.barrelx = 0
+  end
+  
+  //check for vertical movment
+  if (btn(⬆️, 1)) then
+    if (player2.angle < 45) then
+      player2.angle += dbarrel
+    end
+  end
+  
+  if (btn(⬇️, 1)) then
+   if (player2.angle > 0) then
+      player2.angle -= dbarrel
+    end
+  end
+  
+  if (can_move(p2x, p2y)) then
+   player2.x = mid(0, p2x, 120.5)
+   player2.y = mid(0, p2y, 127)
  end
 
 end
@@ -246,7 +246,7 @@ end
 end
 -->8
 function draw_missile() 
-	//spr
+  //spr
 end
 __gfx__
 0000000000aaaa002222222222222222222222222222222222222222222222252222222252222225000000000000000000000000000000000000000000000000
