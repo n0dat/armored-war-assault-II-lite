@@ -53,10 +53,8 @@ end
 function _draw()
   cls()
   map(0,0,0,0,16,16)
-  spr(2, player1.x+player1.barrelx, player1.y+player1.barrely)
-  spr(2, player2.x+player2.barrelx, player2.y+player2.barrely)
   draw_players()
-  draw_missile()
+  --[[
   print("player "..current_player.." turn", 7)
   // debug statements
   print("p1.x: "..player1.x, 7)
@@ -66,6 +64,7 @@ function _draw()
   print("p2.y: "..player2.y, 7)
   print("p2.angle: "..player2.angle, 7)
   spr(9, player1.bottom_left.x, player1.bottom_left.y)
+		--]]
 end
 
 function get_tile(tile_type, x, y)
@@ -78,6 +77,7 @@ function can_move(x, y)
  return not get_tile(7, x, y)
 end
 
+--[[
 function do_gravity()
  p1yg = player1.y
  p2yg = player2.y
@@ -115,98 +115,132 @@ function do_gravity()
  
 end
 
+--]]
+
 function init_players()
-  players[1].x = 15
-  players[1].y = 25
-  players[1].bottom_left = {}
-  players[1].bottom_left.x = players[1].x
-  players[1].bottom_left.y = players[1].y + 8
-  players[1].bottom_right = {}
-  players[1].bottom_right.x = players[1].x + 8
-  players[1].bottom_right.y = players[1].y + 8
-  players[1].sprite = 3
-  players[1].angle = 0
-  players[1].facing = false //facing false means left, otherwise right
-  players[1].barrelx = players[1].x + 7 //coordinates for end of barrel relative to top left of sprite
-  players[1].barrely = players[1].y + 2
-  
-  players[2].x = 110
-  players[2].y = 25
-  players[2].sprite = 19
-  players[2].angle = 0
-  players[2].facing = false
-  players[2].barrelx = players[2].x + 7
-  players[2].barrely = players[2].y + 2
-  
+		players = {
+		 {
+				x = 15,
+				y = 25,
+				bottom_left = {
+					x = 0,
+					y = 0
+				},
+				bottom_right = {
+					x = 0,
+					y = 0
+				},
+				sprite = 4,
+				sprites = {4,5,6,7}, --all possible sprites
+				angle = 0,
+				barrelx = 0,
+				barrely = 0,
+				facing_left = false
+			},
+			{
+				x = 110,
+				y = 25,
+				bottom_left = {
+					x = 0,
+					y = 0
+				},
+				bottom_right = {
+					x = 0,
+					y = 0
+				},
+				sprite = 20,
+				sprites = {20,21,22,23},
+				angle = 0,
+				barrelx = 0,
+				barrely = 0,
+				facing_left = false
+			} 
+		}
+		
+		players[1].bottom_left.x = players[1].x
+		players[1].bottom_left.y = players[1].y + 8
+		
+		players[1].bottom_right.x = players[1].x + 8
+		players[1].bottom_right.y = players[1].y + 8
+		
+		players[2].bottom_left.x = players[2].x
+		players[2].bottom_left.y = players[2].y + 8
+		
+		players[2].bottom_right.x = players[2].x + 8
+		players[2].bottom_right.y = players[2].y + 8
+		
+		players[1].barrelx = players[1].x + 7
+		players[1].barrely = players[1].y + 2
+		
+		players[2].barrelx = players[2].x + 7
+		players[2].barrely = players[2].y + 2
 end
 
 function draw_players()
+	for i = 1, #players do
+		spr(players[i].sprite,players[i].x,players[i].y, 1, 1, players[i].facing_left)
+	end
+end
+
+function update_player_sprites()
 		for i = 1, #players do
 	  if (players[i].angle < 10) then
-	    players[i].sprite = 4
+	    players[i].sprite = players[i].sprites[1]
 	  elseif (players[i].angle < 20) then
-	    players[i].sprite = 5
+	    players[i].sprite = players[i].sprites[2]
 	  elseif (players[i].angle < 30) then
-	    players[i].sprite = 6
+	    players[i].sprite = players[i].sprites[3]
 	  else
-	    players[i].sprite = 7
-	  end
-	  
-	  spr(players[i].sprite,players[i].x,players[i].y, 1, 1, player1.facing) 
+	    players[i].sprite = players[i].sprites[4]
+	  end 
 	 end 
 end
 
 function move_players(player_id)
   //check for horizontal movement
-if (player_id == 1) then
- px = players[player_id].x
- py = players[player_id].y
+  
  
-  if (btn(➡️, 0)) then
-    px += 0.5
-    if facing then
-    	players[player_id].barrelx += 7
-    	player1.facing = false
-				end
+ if (btn(➡️, 0)) then
+   players[player_id].x += 0.5
+   if players[player_id].facing_left then
+   	players[player_id].barrelx += 7
+   	players[player_id].facing_left = false
+			end
+ end
+  
+ if (btn(⬅️, 0)) then
+   players[player_id].x -= 0.5
+   if not players[player_id].facing_left then
+   	players[player_id].barrelx -= 7
+   	players[player_id].facing_left = true
+			end
+ end
+  
+ //check for vertical movment
+ if (btn(⬆️, 0)) then
+   if (players[player_id].angle < 45) then
+     players[player_id].angle += dbarrel
+   end
+ end
+ 
+ if (btn(⬇️, 0)) then
+  if (players[player_id].angle > 0) then
+     players[player_id].angle -= dbarrel
   end
+ end
+ 
+ update_player_sprites()
   
-  if (btn(⬅️, 0)) then
-    p1x -= 0.5
-    if not facing then
-    	players[player_id].barrelx -= 7
-    	player1.facing = true
-				end
-  end
-  
-  //check for vertical movment
-  if (btn(⬆️, 0)) then
-    if (players[player_id].angle < 45) then
-      players[player_id].angle += dbarrel
-    end
-  end
-  
-  if (btn(⬇️, 0)) then
-   if (players[player_id].angle > 0) then
-      players[player_id].angle -= dbarrel
-    end
-  end
-  
-  
-  //if (can_move(p1x, p1y)) then
-   //player1.x = mid(0, p1x, 120.5)
-   //player1.y = mid(0, p1y, 127)
-   //end
 end
  
 
-end
 -->8
 function draw_missile() 
   //spr
 end
 
 function move_phase_update()
-   do_gravity()
+   --do_gravity()
    // above needs to be
    // re-implemented
    
