@@ -10,7 +10,7 @@ dbarrel = 0.5
 //ground level
 ground = 56
 //gravity
-gravity = 0.6
+grav_const = 0.6
 
 //player tables
 players = {}
@@ -44,6 +44,7 @@ function _init()
 end
 
 function _update60()
+		print("here",7)
 		if (gamephase == 1) then
 			move_phase_update()
 		end
@@ -52,19 +53,11 @@ end
   
 function _draw()
   cls()
+  print(solid_ret, 7)
   map(0,0,0,0,16,16)
   draw_players()
-  --[[
-  print("player "..current_player.." turn", 7)
-  // debug statements
-  print("p1.x: "..player1.x, 7)
-  print("p1.y: "..player1.y, 7)
-  print("p1.angle: "..player1.angle, 7)
-  print("p2.x: "..player2.x, 7)
-  print("p2.y: "..player2.y, 7)
-  print("p2.angle: "..player2.angle, 7)
-  spr(9, player1.bottom_left.x, player1.bottom_left.y)
-		--]]
+  print(new_y, 7)
+  print(players[1].bottom_left.y)
 end
 
 function get_tile(tile_type, x, y)
@@ -77,6 +70,17 @@ function can_move(x, y)
  return not get_tile(7, x, y)
 end
 
+function do_gravity()
+ local curr_y
+	local curr_x
+	for i = 1, #players do
+		cur_x = players[i].bottom_left.blx
+		new_y = players[i].bottom_left.bly - grav_const
+		if (not is_solid(cur_x, new_y + 1)) then
+				move_player_cords(i, 0, grav_const)
+		end
+	end
+end
 --[[
 function do_gravity()
  p1yg = player1.y
@@ -123,12 +127,12 @@ function init_players()
 				x = 15,
 				y = 25,
 				bottom_left = {
-					x = 0,
-					y = 0
+					blx = 0,
+					bly = 0
 				},
 				bottom_right = {
-					x = 0,
-					y = 0
+					brx = 0,
+					bry = 0
 				},
 				sprite = 4,
 				sprites = {4,5,6,7}, --all possible sprites
@@ -141,12 +145,12 @@ function init_players()
 				x = 110,
 				y = 25,
 				bottom_left = {
-					x = 0,
-					y = 0
+					blx = 0,
+					bly = 0
 				},
 				bottom_right = {
-					x = 0,
-					y = 0
+					brx = 0,
+					bry = 0
 				},
 				sprite = 20,
 				sprites = {20,21,22,23},
@@ -157,17 +161,17 @@ function init_players()
 			} 
 		}
 		
-		players[1].bottom_left.x = players[1].x
-		players[1].bottom_left.y = players[1].y + 8
+		players[1].bottom_left.blx = players[1].x
+		players[1].bottom_left.bly = players[1].y + 7
 		
-		players[1].bottom_right.x = players[1].x + 8
-		players[1].bottom_right.y = players[1].y + 8
+		players[1].bottom_right.brx = players[1].x + 7
+		players[1].bottom_right.bry = players[1].y + 7
 		
-		players[2].bottom_left.x = players[2].x
-		players[2].bottom_left.y = players[2].y + 8
+		players[2].bottom_left.blx = players[2].x
+		players[2].bottom_left.bly = players[2].y + 7
 		
-		players[2].bottom_right.x = players[2].x + 8
-		players[2].bottom_right.y = players[2].y + 8
+		players[2].bottom_right.brx = players[2].x + 7
+		players[2].bottom_right.bry = players[2].y + 7
 		
 		players[1].barrelx = players[1].x + 7
 		players[1].barrely = players[1].y + 2
@@ -201,7 +205,8 @@ function move_players(player_id)
   
  
  if (btn(➡️, 0)) then
-   players[player_id].x += 0.5
+   move_player_cords(player_id, 0.5, 0)
+   
    if players[player_id].facing_left then
    	players[player_id].barrelx += 7
    	players[player_id].facing_left = false
@@ -209,7 +214,7 @@ function move_players(player_id)
  end
   
  if (btn(⬅️, 0)) then
-   players[player_id].x -= 0.5
+   move_player_cords(player_id, -0.5, 0)
    if not players[player_id].facing_left then
    	players[player_id].barrelx -= 7
    	players[player_id].facing_left = true
@@ -232,6 +237,17 @@ function move_players(player_id)
  update_player_sprites()
   
 end
+
+function move_player_cords(pid, dx, dy)
+	players[pid].x += dx
+	players[pid].y += dy
+	
+	players[pid].bottom_left.blx += dx
+	players[pid].bottom_left.bly += dy
+	
+	players[pid].bottom_right.brx += dx
+	players[pid].bottom_right.bry += dy
+end
  
 
 -->8
@@ -243,7 +259,8 @@ function move_phase_update()
    --do_gravity()
    // above needs to be
    // re-implemented
-   
+   print ("here")
+   do_gravity()
    
    if (btn(end_turn_key, 0)) then
     current_player = 2
@@ -254,6 +271,18 @@ function move_phase_update()
    
    move_players(current_player)
 
+end
+
+--collision detection (pixel basis)
+
+function is_solid(x, y)
+	if (pget(x, y) == 15) then
+		solid_ret = true
+		return true
+	else
+		solid_ret = false
+		return false
+	end
 end
 __gfx__
 0000000000aaaa002222222222222222222222222222222222222222222222252222222252222225000000000000000000000000000000000000000000000000
