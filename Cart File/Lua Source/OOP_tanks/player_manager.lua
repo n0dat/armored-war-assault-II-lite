@@ -34,12 +34,16 @@ function player_manager:update()
 end
 
 function player_manager:do_gravity()
-    local curr_x
-    local new_y
+    local bl_x
+    local bl_y
+    local br_x
+    local br_y
     for i = 1, #self.players do
-        cur_x = self.players[i].bottom_left.x
-        new_y = self.players[i].bottom_left.y - grav_const
-        if (not is_solid(cur_x, new_y + 1)) then
+        bl_x = self.players[i].bottom_left.x
+        bl_y = self.players[i].bottom_left.y - grav_const
+        br_x = self.players[i].bottom_right.x
+        br_y = self.players[i].bottom_right.y - grav_const
+        if (not is_solid(bl_x, bl_y+1, solid_ground_color) and not is_solid(br_x, br_y+1, solid_ground_color)) then
             self.players[i]:move_player_cords(0, grav_const)
         end
     end
@@ -51,11 +55,5 @@ function player_manager:draw()
    end
 end
 
-function is_solid(x, y)
-	if (pget(x, y) == solid_ground_color) then
-		return true
-	else
-		return false
-	end
-end
+
 

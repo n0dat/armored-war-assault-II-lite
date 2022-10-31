@@ -7,7 +7,7 @@ player = {}
 player.__index = player
 
 --Player constructor
-function player:new(x, y, sprite, sprite_col) --Sprite collection and starting sprite along with starting coordinites.
+function player:new(x, y, sprite, init_speed, sprite_col, projectile_mngr_ref) --Sprite collection and starting sprite along with starting coordinites.
     local new_obj = {
         x = x or 15,
         y = y or 25,
@@ -24,9 +24,14 @@ function player:new(x, y, sprite, sprite_col) --Sprite collection and starting s
         angle = 0,
         barrelx = 0,
         barrely = 0,
-        facing_left = false
+        barrel_rise = 0,
+        facing_left = false,
+        speed = init_speed or 0.5,
+        engine_power = 2,
+        pm_ref = projectile_mngr_ref
     }
     setmetatable(new_obj, player)
+    
     
     new_obj.bottom_left.x = new_obj.x
     new_obj.bottom_left.y = new_obj.y + 7
@@ -42,7 +47,14 @@ function player:new(x, y, sprite, sprite_col) --Sprite collection and starting s
 end
 
 function player:controls()
+    self:shoot()
     self:move_player()
+end
+
+function player:shoot()
+    if (btnp(5)) then
+        self.pm_ref:spawn_projectile(self.barrelx, self.barrely, 0.5, -0.5)
+    end
 end
 
 function player:move_player()
@@ -50,18 +62,34 @@ function player:move_player()
   
  
     if (btn(1)) then
-        self:move_player_cords(0.5, 0)
-        if (self.facing_left) then
-            self.barrelx += 7
-            self.facing_left = false
+        if (not is_solid(self.bottom_right.x + 1, self.bottom_right.y, solid_ground_color)) then
+            self:move_player_cords(self.speed, 0)
+            if (self.facing_left) then
+                self.barrelx += 7
+                self.facing_left = false
+            end
+        elseif (not is_solid(self.bottom_right.x + 1, self.bottom_right.y - self.engine_power, solid_ground_color)) then
+            self:move_player_cords(self.speed, -1 * self.engine_power)
+            if (self.facing_left) then
+                self.barrelx += 7
+                self.facing_left = false
+            end
         end
     end
 
     if (btn(0)) then
-        self:move_player_cords(-0.5, 0)
-        if (not self.facing_left) then
-            self.barrelx -= 7
-            self.facing_left = true
+        if (not is_solid(self.bottom_left.x - 1, self.bottom_left.y, solid_ground_color)) then
+            self:move_player_cords(-1*self.speed, 0)
+            if (not self.facing_left) then
+                self.barrelx -= 7
+                self.facing_left = true
+            end
+        elseif (not is_solid(self.bottom_left.x - 1, self.bottom_left.y - self.engine_power, solid_ground_color)) then
+            self:move_player_cords(-1*self.speed, -1 * self.engine_power)
+            if (not self.facing_left) then
+                self.barrelx -= 7
+                self.facing_left = true
+            end
         end
     end
 
@@ -69,12 +97,14 @@ function player:move_player()
     if (btn(2)) then
         if (self.angle < 45) then
             self.angle += dbarrel
+            self:set_barrel_rise()
         end
     end
 
     if (btn(3)) then
         if (self.angle > 0) then
             self.angle -= dbarrel
+            self:set_barrel_rise()
         end
     end
  
@@ -91,6 +121,19 @@ function player:move_player_cords(dx, dy)
 	
 	self.bottom_right.x += dx
 	self.bottom_right.y += dy
+    
+    self.barrelx += dx
+    self.barrely += dy
+end
+
+function player:set_barrel_rise()
+    if (self.angle < 10) then
+        self.barrel_rise = 0
+    elseif (self.angle < 30) then
+        self.barrel_rise = 1
+    else
+        self.barrel_rise = 2
+    end 
 end
 
 function player:update_player_sprites()
@@ -107,6 +150,7 @@ end
 
 function player:draw()
    spr(self.sprite, self.x, self.y, 1, 1, self.facing_left)
+   spr(9, self.barrelx , self.barrely - self.barrel_rise, 1, 1)
 end
 
 function player:update()
