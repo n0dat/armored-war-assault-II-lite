@@ -2,261 +2,44 @@ pico-8 cartridge // http://www.pico-8.com
 version 38
 __lua__
 
-//globals
+#include player.lua
+#include player_manager.lua
+#include utility.lua
+#include projectile.lua
+#include projectile_manager.lua
 
-//barrel movement const
-dbarrel = 0.5
-
-//ground level
-ground = 56
-//gravity
-gravity = 0.6
-
-//player tables
-player1={}
-player2={}
-
-//projectiles
-missles={}
-
-//1 = movement
-//2 = shoot
-gamephase = 0
-
-// on ground
-on_ground = false
-	
-	// keeps track of which player is currently moving
-current_player = 1	
-
-
-// turn based keys
-end_turn_key = ❎
-fire_key = 🅾️
--->8
 function _init()
-	gamephase = 1
-	palt(0, false)//draw black
-	palt(2, true)//do not draw white
-	init_players()
+    palt(0, false)//draw black
+    palt(2, true)//do not draw white
+    glbl_projectile_manager = projectile_manager:new()
+    glbl_player_manager = player_manager:new()
+    glbl_player_manager:add_player(player:new(15, 25, 4, 0.5, {4,5,6,7}, glbl_projectile_manager))
+    glbl_player_manager:add_player(player:new(110, 25, 20, 0.5, {20,21,22,23}, glbl_projectile_manager))
+    
+    
 end
 
 function _update60()
-	if (gamephase == 1) then
-	 do_gravity()
-	 // above needs to be
-	 // re-implemented
-	 
-	 if (btn(end_turn_key, 0)) then
-	  current_player = 2
-	 end
-	 if (btn(end_turn_key, 1)) then
-	  current_player = 1
-	 end
-	 
-	 move_players(current_player)
-	else
-		
-	end
+    glbl_player_manager:update()
+    glbl_projectile_manager:update()
 end
-	
+
 function _draw()
-	cls()
-	map(0,0,0,0,16,16)
-	spr(2, player1.x+player1.barrelx, player1.y+player1.barrely)
-	spr(2, player2.x+player2.barrelx, player2.y+player2.barrely)
-	draw_players()
-	draw_missile()
-	print("player "..current_player.." turn", 7)
-	// debug statements
-	print("p1.x: "..player1.x, 7)
-	print("p1.y: "..player1.y, 7)
-	print("p1.angle: "..player1.angle, 7)
-	print("p2.x: "..player2.x, 7)
-	print("p2.y: "..player2.y, 7)
-	print("p2.angle: "..player2.angle, 7)
+    cls()
+    map(0,0,0,0,16,16)
+    glbl_player_manager:draw()
+    glbl_projectile_manager:draw()
 end
 
-function get_tile(tile_type, x, y)
- m = fget(mget(x, y), tile_type)
- print(m, 0, 0)
- return m
-end
-
-function can_move(x, y)
- return not get_tile(7, x, y)
-end
-
-function do_gravity()
- p1yg = player1.y
- p2yg = player2.y
-
- if (not on_ground) then
-  p1yg += gravity
- end
- r = can_move(player1.x/8, p1yg/8)
- if (r) then
-  player1.y = mid(0, p1yg, 127)
-  on_ground = false
- else
-  p1yg -= 1
-  on_ground = true
- end
- if (can_move(player1.x, p1y)) then
-  player1.y = mid(0, p1yg, 127)
- end
-
- if (not on_ground) then
-  p2yg += gravity
- end
- r = can_move(player2.x/8, p2yg/8)
- if (r) then
-  player2.y = mid(0, p2yg, 127)
-  on_ground = false
- else
-  p2yg -= 1
-  on_ground = true
- end
- if (can_move(player2.x, p2yg)) then
-  player2.y = mid(0, p2yg, 127)
- end
- 
- 
-end
-
-function init_players()
-	player1.x = 15
-	player1.y = 25
-	player1.sprite = 3
-	player1.angle = 0
-	player1.facing = false //facing false means left, otherwise right
-	player1.barrelx = 7 //coordinates for end of barrel relative to top left of sprite
-	player1.barrely = 2
-	
-	player2.x = 110
-	player2.y = 25
-	player2.sprite = 19
-	player2.angle = 0
-	player2.facing = true
-	player2.barrelx = 7
-	player2.barrely = 2
-	
-end
-
-function draw_players()
-	if (player1.angle < 10) then
-		player1.sprite = 4
-	elseif (player1.angle < 20) then
-		player1.sprite = 5
-	elseif (player1.angle < 30) then
-		player1.sprite = 6
-	else
-		player1.sprite = 7
-	end
-	
-	spr(player1.sprite,player1.x,player1.y, 1, 1, player1.facing) 
-	
-	if (player2.angle < 10) then
-		player2.sprite = 20
-	elseif (player2.angle < 20) then
-		player2.sprite = 21
-	elseif (player2.angle < 30) then
-		player2.sprite = 22
-	else
-		player2.sprite = 23
-	end
-	
-	spr(player2.sprite,player2.x,player2.y, 1, 1, player2.facing) 
-	
-end
-
-function move_players(player_id)
-	//check for horizontal movement
-if (player_id == 1) then
- p1x = player1.x
- p1y = player1.y
- 
-	if (btn(➡️, 0)) then
-		p1x += 0.5
-		player1.facing = false
-		player1.barrelx = 7
-	end
-	
-	if (btn(⬅️, 0)) then
-		p1x -= 0.5
-		player1.facing = true
-		player1.barrelx = 0
-	end
-	
-	//check for vertical movment
-	if (btn(⬆️, 0)) then
-		if (player1.angle < 45) then
-			player1.angle += dbarrel
-		end
-	end
-	
-	if (btn(⬇️, 0)) then
-	 if (player1.angle > 0) then
-			player1.angle -= dbarrel
-		end
-	end
-	
-	if (can_move(p1x, p1y)) then
-	 player1.x = mid(0, p1x, 120.5)
-	 player1.y = mid(0, p1y, 127)
- 	end
-
-else
- p2x = player2.x
- p2y = player2.y
- 
-	if (btn(➡️, 1)) then
-		p2x += 0.5
-		player2.facing = false
-		player2.barrelx = 7
-	end
-	
-	if (btn(⬅️, 1)) then
-		p2x -= 0.5
-		player2.facing = true
-		player2.barrelx = 0
-	end
-	
-	//check for vertical movment
-	if (btn(⬆️, 1)) then
-		if (player2.angle < 45) then
-			player2.angle += dbarrel
-		end
-	end
-	
-	if (btn(⬇️, 1)) then
-	 if (player2.angle > 0) then
-			player2.angle -= dbarrel
-		end
-	end
-	
-	if (can_move(p2x, p2y)) then
-	 player2.x = mid(0, p2x, 120.5)
-	 player2.y = mid(0, p2y, 127)
- end
-
-end
- 
-
-end
--->8
-function draw_missile() 
-	//spr
-end
 __gfx__
-0000000000aaaa002222222222222222222222222222222222222222222222252222222252222225000000000000000000000000000000000000000000000000
+0000000000aaaa002222222222222222222222222222222222222222222222252222222252222222000000000000000000000000000000000000000000000000
 000000000aaaaaa02222222222225222222252222222522522225255222252522222522222222222000000000000000000000000000000000000000000000000
 00700700aa0aa0aa2222222222999555229995552299955522999552229995222299955522222222000000000000000000000000000000000000000000000000
 00077000aaaaaaaa2222222222999222229992222299922222999222229992222299922222222222000000000000000000000000000000000000000000000000
 00077000a0aaaa0a2222222289999999899999998999999989999999899999998999999922222222000000000000000000000000000000000000000000000000
 00700700aa0aa0aa2222222295050509905050599050505990505059905050599050505922222222000000000000000000000000000000000000000000000000
 000000000aa00aa02222222206966965569669605696696056966960569669605696696022222222000000000000000000000000000000000000000000000000
-0000000000aaaa002222222225050502205050522050505220505052205050522050505252222225000000000000000000000000000000000000000000000000
+0000000000aaaa002222222225050502205050522050505220505052205050522050505222222222000000000000000000000000000000000000000000000000
 00000000000000000000000022222222222222222222222222222222222222252222222200000000000000000000000000000000000000000000000000000000
 00000000000000000000000022225222222252222222522522225255222252522222522200000000000000000000000000000000000000000000000000000000
 00000000000000000000000022777555227775552277755522777552227775222277755500000000000000000000000000000000000000000000000000000000
