@@ -28,7 +28,8 @@ function player:new(x, y, sprite, init_speed, sprite_col, projectile_mngr_ref) -
         facing_left = false,
         speed = init_speed or 0.5,
         engine_power = 2,
-        pm_ref = projectile_mngr_ref
+        pm_ref = projectile_mngr_ref,
+        shot_power = 1
     }
     setmetatable(new_obj, player)
     
@@ -53,7 +54,11 @@ end
 
 function player:shoot()
     if (btnp(5)) then
-        self.pm_ref:spawn_projectile(self.barrelx, self.barrely, 0.5, -0.5)
+        if (not self.facing_left) then 
+            self.pm_ref:spawn_projectile(self.barrelx, self.barrely - self.barrel_rise, self.shot_power*cos(self.angle*(1/360)), self.shot_power*sin(self.angle*(1/360)))
+        else
+            self.pm_ref:spawn_projectile(self.barrelx, self.barrely - self.barrel_rise, -1*self.shot_power*cos(self.angle*(1/360)), self.shot_power*sin(self.angle*(1/360)))
+        end
     end
 end
 

@@ -29,6 +29,7 @@ function _draw()
     map(0,0,0,0,16,16)
     glbl_player_manager:draw()
     glbl_projectile_manager:draw()
+				print(stat(7))
 end
 
 __gfx__

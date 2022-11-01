@@ -10,7 +10,9 @@ function projectile:new(init_x, init_y, init_vel_x, init_vel_y, init_spr)
         vel = { x = init_vel_x, y = init_vel_y},
         spr = init_spr,
         is_armed = false,
-        spawn_time = time()
+        spawn_time = time(),
+        has_landed = false,
+        exploded_coords = {x, y}
     }
     setmetatable(new_obj, projectile)
     return new_obj
