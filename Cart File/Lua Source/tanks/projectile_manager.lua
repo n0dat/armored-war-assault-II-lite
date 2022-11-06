@@ -1,10 +1,12 @@
 projectile_manager = {}
 projectile_manager.__index = projectile_manager
 
-function projectile_manager:new(arm_time)
+function projectile_manager:new(init_destruction_manager_ref, init_camera_manager_ref, arm_time)
     local new_obj = {
         projectiles = {},
-        arming_time = arm_time or 0.15 --3 frames
+        arming_time = arm_time or 0.15, --3 frames,
+        destruction_manager_ref = init_destruction_manager_ref,
+        camera_manager_ref,
     }
     setmetatable(new_obj, projectile_manager)
     return new_obj
@@ -27,15 +29,19 @@ end
 function projectile_manager:update_projectiles_pos()
     local new_y_vel
     for i = 1, #self.projectiles do
-        if (self.projectiles[i] != nil and not self.projectiles[i]:check_collision()) then
-            self.projectiles[i].vel.y += bullet_grav_const
-            if (self.projectiles[i].vel.y > 1) then
-                self.projectiles[i].vel.y = 1
+        if (self.projectiles[i] != nil) then
+            if (not self.projectiles[i]:check_collision()) then
+                self.projectiles[i].vel.y += bullet_grav_const
+                if (self.projectiles[i].vel.y > 1) then
+                    self.projectiles[i].vel.y = 1
+                end
+                self.projectiles[i].x += self.projectiles[i].vel.x
+                self.projectiles[i].y += self.projectiles[i].vel.y
+            else
+                self.destruction_manager_ref:add_crater(self.projectiles[i].x, self.projectiles[i].y, 5)
+                self.camera_manager_ref:pause_camera()
+                self:remove_projectile(i)
             end
-            self.projectiles[i].x += self.projectiles[i].vel.x
-            self.projectiles[i].y += self.projectiles[i].vel.y
-        else
-            self:remove_projectile(i)
         end
     end 
 end
@@ -50,8 +56,6 @@ end
 
 function projectile_manager:draw()
    for i = 1, #self.projectiles do
-       print("Inside", 7)
        self.projectiles[i]:draw()
    end
-   print("Outside", 7)
 end
