@@ -4,6 +4,7 @@ game_manager.__index = game_manager
 function game_manager:new()
     local new_obj = {
         game_phase = 1,
+        game_state = 1,
         round_number = 1,
         player_turn = 1,
         cam_y = 0,
@@ -14,6 +15,14 @@ function game_manager:new()
     }
     setmetatable(new_obj, game_manager)
     return new_obj
+end
+
+function game_manager:set_state(state)
+    self.game_state = state
+end
+
+function game_manager:get_state()
+    return self.game_state
 end
 
 function game_manager:set_player_turn(turn_id)
