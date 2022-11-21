@@ -12,6 +12,7 @@ __lua__
 #include destruction_manager.lua
 #include crater.lua
 #include intro.lua
+#include menu_manager.lua
 
 function _init()
 	game_manager_obj = game_manager:new()
@@ -27,35 +28,47 @@ function _init()
 	glbl_projectile_manager.game_manager_ref = game_manager_obj
 	game_manager_obj.projectile_manager_ref = glbl_projectile_manager
 	intro_obj = intro:new()
+	menu_manager_obj = menu_manager:new()
 end
 
 function _update60()
-	--if (next_scene > 165) then
-	--	game_manager_obj:set_state(2)
-	--end
-	intro_obj:update(game_manager_obj)
-	glbl_player_manager:update()	
-	glbl_projectile_manager:update()
-	camera_manager_obj:update()
+	-- this is the intro state
+	if (game_manager_obj:get_state() == 1) then
+		intro_obj:update(game_manager_obj)
+	end
+	-- this is the main menu state
+	if (game_manager_obj:get_state() == 2) then
+		menu_manager_obj:update(game_manager_obj)
+	end
+	-- this is the main game state
+	if (game_manager_obj:get_state() == 3) then
+		glbl_player_manager:update()	
+		glbl_projectile_manager:update()
+		camera_manager_obj:update()
+	end
+
 end
 
 function _draw()
-
+	-- this is the intro state
 	if (game_manager_obj:get_state() == 1) then
 		cls(1)
 		intro_obj:draw()
 	end
+	-- this is the main menu state
 	if (game_manager_obj:get_state() == 2) then
+		cls(1)
+		pal()
+		menu_manager_obj:draw()
+	end
+	-- this is the main game state
+	if (game_manager_obj:get_state() == 3) then
 		cls()
  		map(0,0,0,0,32,16)
 		destruction_manager_obj:draw()
 		glbl_player_manager:draw()
 		glbl_projectile_manager:draw()
 		game_manager_obj:update()	
-	end
-	-- this is the main game state
-	if (game_manager_obj:get_state() == 3) then
-		--
 	end
 end
 
