@@ -31,9 +31,6 @@ function projectile_manager:update_projectiles_pos()
     local new_y_vel
     for i = 1, #self.projectiles do
         if (self.projectiles[i] != nil) then
-            if (self.projectiles[i].shot_type == 2) then
-                self.projectiles[i]:split(self)
-            end
             if (not self.projectiles[i]:check_collision()) then
                 self.projectiles[i].vel.y += bullet_grav_const
                 if (self.projectiles[i].vel.y > 1) then
@@ -41,12 +38,15 @@ function projectile_manager:update_projectiles_pos()
                 end
                 self.projectiles[i].x += self.projectiles[i].vel.x
                 self.projectiles[i].y += self.projectiles[i].vel.y
+                
+                self.projectiles[i]:split(self)
             else
                 sfx(0)
                 self.destruction_manager_ref:add_crater(self.projectiles[i].x, self.projectiles[i].y, 5)
                 self.camera_manager_ref:pause_camera()
                 self:remove_projectile(i)
             end
+            
         end
     end 
 end

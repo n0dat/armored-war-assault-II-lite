@@ -45,6 +45,7 @@ function _update60()
 		glbl_player_manager:update()	
 		glbl_projectile_manager:update()
 		camera_manager_obj:update()
+		print("projectiles:"..count(glbl_projectile_manager.projectiles))
 	end
 
 end
@@ -68,7 +69,7 @@ function _draw()
 		destruction_manager_obj:draw()
 		glbl_player_manager:draw()
 		glbl_projectile_manager:draw()
-		game_manager_obj:update()	
+		game_manager_obj:update()
 	end
 end
 
