@@ -29,8 +29,12 @@ function player:new(x, y, sprite, init_speed, sprite_col, projectile_mngr_ref) -
         speed = init_speed or 0.5,
         engine_power = 2,
         pm_ref = projectile_mngr_ref,
-        shot_power = 1
+        shot_power = 1,
+        shot_type = 1
     }
+    -- shot type = 1 is standard single bomb
+    -- shot type = 2 is cluster bomb
+
     setmetatable(new_obj, player)
     
     
@@ -52,12 +56,18 @@ function player:controls()
     self:move_player()
 end
 
+function player:set_shot_type(shot)
+    self.shot_type = shot
+end
+
 function player:shoot()
     if (btnp(5)) then
-        if (not self.facing_left) then 
-            self.pm_ref:spawn_projectile(self.barrelx, self.barrely - self.barrel_rise, self.shot_power*cos(self.angle*(1/360)), self.shot_power*sin(self.angle*(1/360)))
+        if (not self.facing_left) then
+            sfx(1)
+            self.pm_ref:spawn_projectile(self.barrelx, self.barrely - self.barrel_rise, self.shot_power*cos(self.angle*(1/360)), self.shot_power*sin(self.angle*(1/360)), 1)
         else
-            self.pm_ref:spawn_projectile(self.barrelx, self.barrely - self.barrel_rise, -1*self.shot_power*cos(self.angle*(1/360)), self.shot_power*sin(self.angle*(1/360)))
+            sfx(1)
+            self.pm_ref:spawn_projectile(self.barrelx, self.barrely - self.barrel_rise, -1*self.shot_power*cos(self.angle*(1/360)), self.shot_power*sin(self.angle*(1/360)), 1)
         end
     end
 end
@@ -65,7 +75,6 @@ end
 function player:move_player()
     --/check for horizontal movement
   
- 
     if (btn(1)) then
         if (not is_solid(self.bottom_right.x + 1, self.bottom_right.y, solid_ground_color)) then
             self:move_player_cords(self.speed, 0)
@@ -159,7 +168,7 @@ function player:draw()
 end
 
 function player:update()
-   self:controls() 
+    self:controls()
 end
 
 
