@@ -3,7 +3,7 @@ projectile = {}
 
 projectile.__index = projectile
 
-function projectile:new(init_x, init_y, init_vel_x, init_vel_y, init_spr, proj_type)
+function projectile:new(init_x, init_y, init_vel_x, init_vel_y, init_spr, proj_type, proj_dir)
     local new_obj = {
         x = init_x or 0,
         y = init_y or 0,
@@ -14,8 +14,8 @@ function projectile:new(init_x, init_y, init_vel_x, init_vel_y, init_spr, proj_t
         has_landed = false,
         exploded_coords = {x, y},
         shot_type = proj_type or 1,
-        is_split = false
-
+        is_split = false,
+        direction = proj_dir or 1
     }
     setmetatable(new_obj, projectile)
     return new_obj
@@ -37,9 +37,17 @@ end
 function projectile:split(proj_man)
     if (self.is_split == false and self.shot_type == 2) then
         if (self.is_armed and (time() - self.spawn_time > 0.50)) then
-            proj_man:spawn_projectile(self.x+2, self.y, self.vel.x * 1.15, self.vel.y * 1.15, 1)
-            proj_man:spawn_projectile(self.x-2, self.y, self.vel.x * 0.85, self.vel.y * 0.85, 1)
-            self.is_split = true
+            if (self.direction ==  1) then
+                proj_man:spawn_projectile(self.x+2, self.y, self.vel.x * 1.15, self.vel.y * 1.15, 2, 1)
+                proj_man:spawn_projectile(self.x-2, self.y, self.vel.x * 0.85, self.vel.y * 0.85, 2, 1)
+                self.is_split = true
+
+            else
+                proj_man:spawn_projectile(self.x-2, self.y, self.vel.x * 1.15, self.vel.y * 1.15, 2, 0)
+                proj_man:spawn_projectile(self.x+2, self.y, self.vel.x * 0.85, self.vel.y * 0.85, 2, 0)
+                self.is_split = true
+            end
+
         end
     end
 end

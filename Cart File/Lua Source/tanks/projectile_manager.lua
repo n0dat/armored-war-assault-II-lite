@@ -13,8 +13,8 @@ function projectile_manager:new(init_destruction_manager_ref, init_camera_manage
     return new_obj
 end
 
-function projectile_manager:spawn_projectile(x, y, vel_x, vel_y, p_type) --spawn new projectile using a vector
-    local new_projectile = projectile:new(x, y, vel_x, vel_y, 9, p_type)
+function projectile_manager:spawn_projectile(x, y, vel_x, vel_y, p_type, p_dir) --spawn new projectile using a vector
+    local new_projectile = projectile:new(x, y, vel_x, vel_y, 9, p_type, p_dir)
     add(self.projectiles, new_projectile)
 end
 
