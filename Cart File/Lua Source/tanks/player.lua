@@ -7,7 +7,7 @@ player = {}
 player.__index = player
 
 --Player constructor
-function player:new(x, y, sprite, init_speed, sprite_col, projectile_mngr_ref) --Sprite collection and starting sprite along with starting coordinites.
+function player:new(x, y, sprite, init_speed, sprite_col, projectile_mngr_ref, camera_mgr_ref) --Sprite collection and starting sprite along with starting coordinites.
     local new_obj = {
         x = x or 15,
         y = y or 25,
@@ -30,13 +30,14 @@ function player:new(x, y, sprite, init_speed, sprite_col, projectile_mngr_ref) -
         engine_power = 2,
         pm_ref = projectile_mngr_ref,
         shot_power = 1,
-        shot_type = 1
+        shot_type = 1,
+        can_move = true,
+        cm_ref
     }
     -- shot type = 1 is standard single bomb
     -- shot type = 2 is cluster bomb
 
     setmetatable(new_obj, player)
-    
     
     new_obj.bottom_left.x = new_obj.x
     new_obj.bottom_left.y = new_obj.y + 7
@@ -47,13 +48,14 @@ function player:new(x, y, sprite, init_speed, sprite_col, projectile_mngr_ref) -
     new_obj.barrelx = new_obj.x + 7
     new_obj.barrely = new_obj.y + 2
     
-    
     return new_obj
 end
 
 function player:controls()
-    self:shoot()
-    self:move_player()
+    if (self.can_move) then
+        self:shoot()
+        self:move_player()
+    end
 end
 
 function player:set_shot_type(shot)
@@ -77,7 +79,7 @@ end
 
 function player:move_player()
     --/check for horizontal movement
-  
+    
     if (btn(1)) then
         if (not is_solid(self.bottom_right.x + 1, self.bottom_right.y, solid_ground_color)) then
             self:move_player_cords(self.speed, 0)
@@ -130,16 +132,31 @@ function player:move_player()
 end
 
 function player:move_player_cords(dx, dy)
-    self.x += dx
-	self.y += dy
-	
-	self.bottom_left.x += dx
-	self.bottom_left.y += dy
-	
-	self.bottom_right.x += dx
-	self.bottom_right.y += dy
+    a = self.cm_ref.camera.cam_x
+    b = self.cm_ref.camera.cam_x + 127
+
+    if ((self.x + dx) > a and (self.x + dx) < b) then
+        self.x += dx
+    end
+
+    self.y += dy
+
+    if ((self.bottom_left.x + dx) > a and (self.bottom_left.x + dx) < b) then
+        self.bottom_left.x += dx
+    end
+
+    self.bottom_left.y += dy
+
+    if ((self.bottom_right.x + dx) > a and (self.bottom_right.x + dx) < b) then
+        self.bottom_right.x += dx
+    end
     
-    self.barrelx += dx
+    self.bottom_right.y += dy
+
+    if ((self.barrelx + dx) > a and (self.barrelx + dx) < b) then
+        self.barrelx += dx
+    end
+
     self.barrely += dy
 end
 
@@ -171,7 +188,9 @@ function player:draw()
 end
 
 function player:update()
-    self:controls()
+    if (self.cm_ref != nil) then
+        self:controls()
+    end
 end
 
 

@@ -17,13 +17,17 @@ __lua__
 function _init()
 	game_manager_obj = game_manager:new()
 	destruction_manager_obj = destruction_manager:new()
-	palt(0, false) // draw black
-	palt(2, true) // do not draw white
+	palt(0, false) -- draw black
+	palt(2, true) -- do not draw white
 	glbl_projectile_manager = projectile_manager:new(destruction_manager_obj)
 	glbl_player_manager = player_manager:new(game_manager_obj)
-	glbl_player_manager:add_player(player:new(15, 25, 4, 0.5, {4,5,6,7}, glbl_projectile_manager))
-	glbl_player_manager:add_player(player:new(110, 25, 20, 0.5, {20,21,22,23}, glbl_projectile_manager))
+	player_1 = player:new(15, 25, 4, 0.5, {4,5,6,7}, glbl_projectile_manager)
+	player_2 = player:new(110, 25, 20, 0.5, {20,21,22,23}, glbl_projectile_manager)
+	glbl_player_manager:add_player(player_1)
+	glbl_player_manager:add_player(player_2)
 	camera_manager_obj = camera_manager:new(game_manager_obj,glbl_projectile_manager, glbl_player_manager.players)
+	player_1.cm_ref = camera_manager_obj
+	player_2.cm_ref = camera_manager_obj
 	glbl_projectile_manager.camera_manager_ref = camera_manager_obj
 	glbl_projectile_manager.game_manager_ref = game_manager_obj
 	game_manager_obj.projectile_manager_ref = glbl_projectile_manager

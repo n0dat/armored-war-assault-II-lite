@@ -4,7 +4,6 @@ grav_const = 0.6 --Do not set above 1
 
 --Player Manager Class
 player_manager = {}
-
 player_manager.__index = player_manager
 
 function player_manager:new(init_game_manager_ref)
@@ -19,6 +18,12 @@ end
 function player_manager:add_player(new_player)
     if (new_player != nil) then
         add(self.players, new_player)
+    end
+end
+
+function player_manager:add_player_cmr(cam_mgr_ref)
+    for i = 1, #self.players do
+        self.players[i].cm_ref = cam_mgr_ref
     end
 end
 
@@ -37,6 +42,7 @@ function player_manager:do_gravity()
     local br_y
     local can_fall
     for i = 1, #self.players do
+        self.players[i].can_move = false
         can_fall = true
         bl_x = self.players[i].bottom_left.x
         bl_y = self.players[i].bottom_left.y -- grav_const
@@ -62,6 +68,7 @@ function player_manager:do_gravity()
             self.players[i]:move_player_cords(0, grav_const)
         end
         --]]
+        self.players[i].can_move = true
     end
 end
 
