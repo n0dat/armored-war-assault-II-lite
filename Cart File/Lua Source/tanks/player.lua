@@ -67,12 +67,14 @@ end
 -- set the last value in the spawn_projectile() call to 1 to have standard shots
 function player:shoot()
     if (btnp(5)) then
-        if (not self.facing_left) then
-            sfx(1)
-            self.pm_ref:spawn_projectile(self.barrelx, self.barrely - self.barrel_rise, self.shot_power*cos(self.angle*(1/360)), self.shot_power*sin(self.angle*(1/360)), 2, 1)
-        else
-            sfx(1)
-            self.pm_ref:spawn_projectile(self.barrelx, self.barrely - self.barrel_rise, -1*self.shot_power*cos(self.angle*(1/360)), self.shot_power*sin(self.angle*(1/360)), 2, 0)
+        if (self.x > self.cm_ref.camera.cam_x and self.x < self.cm_ref.camera.cam_x + 127) then
+            if (not self.facing_left) then
+                sfx(1)
+                self.pm_ref:spawn_projectile(self.barrelx, self.barrely - self.barrel_rise, self.shot_power*cos(self.angle*(1/360)), self.shot_power*sin(self.angle*(1/360)), 2, 1)
+            else
+                sfx(1)
+                self.pm_ref:spawn_projectile(self.barrelx, self.barrely - self.barrel_rise, -1*self.shot_power*cos(self.angle*(1/360)), self.shot_power*sin(self.angle*(1/360)), 2, 0)
+            end
         end
     end
 end
