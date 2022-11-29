@@ -15,15 +15,15 @@ __lua__
 #include menu_manager.lua
 
 function _init()
-	game_manager_obj = game_manager:new()
+	menu_manager_obj = menu_manager:new()
+	game_manager_obj = game_manager:new(menu_manager_obj)
 	destruction_manager_obj = destruction_manager:new()
 	palt(0, false) -- draw black
 	palt(2, true) -- do not draw white
 	glbl_projectile_manager = projectile_manager:new(destruction_manager_obj)
 	glbl_player_manager = player_manager:new(game_manager_obj)
-	game_manager_obj.player_manager_ref = glbl_player_manager
-	player_1 = player:new(15, 25, 4, 0.5, {4,5,6,7}, glbl_projectile_manager)
-	player_2 = player:new(110, 25, 20, 0.5, {20,21,22,23}, glbl_projectile_manager)
+	player_1 = player:new(15, 25, 4, 0.5, {4,5,6,7}, glbl_projectile_manager, menu_manager_obj)
+	player_2 = player:new(110, 25, 20, 0.5, {20,21,22,23}, glbl_projectile_manager, menu_manager_obf)
 	glbl_player_manager:add_player(player_1)
 	glbl_player_manager:add_player(player_2)
 	camera_manager_obj = camera_manager:new(game_manager_obj,glbl_projectile_manager, glbl_player_manager.players)
@@ -33,7 +33,6 @@ function _init()
 	glbl_projectile_manager.game_manager_ref = game_manager_obj
 	game_manager_obj.projectile_manager_ref = glbl_projectile_manager
 	intro_obj = intro:new()
-	menu_manager_obj = menu_manager:new()
 end
 
 function _update60()
@@ -75,6 +74,11 @@ function _draw()
 		glbl_player_manager:draw()
 		glbl_projectile_manager:draw()
 		game_manager_obj:update()
+		print("player_1.x = "..player_1.x, camera_manager_obj.camera.cam_x, 0, 0)
+		print("player_1.barrelx = "..player_1.barrelx, camera_manager_obj.camera.cam_x, 8, 0)
+		print("player_1.bottom_left.x = "..player_1.bottom_left.x, camera_manager_obj.camera.cam_x, 16, 0)
+		print("player_1.bottom_right.x = "..player_1.bottom_right.x, camera_manager_obj.camera.cam_x, 24, 0)
+
 	end
 end
 

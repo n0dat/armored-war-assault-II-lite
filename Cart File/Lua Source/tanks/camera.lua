@@ -6,7 +6,8 @@ function camera_class:new(init_x, init_y, init_min_x, init_max_x)
         cam_x = init_x,
         cam_y = init_y,
         min_x = init_min_x,
-        max_x = init_max_x
+        max_x = init_max_x,
+        player_locked = false
     }
     setmetatable(new_obj, camera_class)
     return new_obj

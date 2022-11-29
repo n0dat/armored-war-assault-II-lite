@@ -7,7 +7,7 @@ player = {}
 player.__index = player
 
 --Player constructor
-function player:new(x, y, sprite, init_speed, sprite_col, projectile_mngr_ref, camera_mgr_ref) --Sprite collection and starting sprite along with starting coordinites.
+function player:new(x, y, sprite, init_speed, sprite_col, projectile_mngr_ref, menu_mgr_ref) --Sprite collection and starting sprite along with starting coordinites.
     local new_obj = {
         x = x or 15,
         y = y or 25,
@@ -32,7 +32,7 @@ function player:new(x, y, sprite, init_speed, sprite_col, projectile_mngr_ref, c
         shot_power = 1,
         shot_type = 1,
         can_move = true,
-        health = 100,
+        mm_ref = menu_mgr_ref,
         cm_ref
     }
     -- shot type = 1 is standard single bomb
@@ -135,28 +135,26 @@ function player:move_player()
 end
 
 function player:move_player_cords(dx, dy)
-    a = self.cm_ref.camera.cam_x
-    b = self.cm_ref.camera.cam_x + 127
 
-    if ((self.x + dx) > a and (self.x + dx) < b) then
+    if ((self.x + dx) > 0 and (self.x + dx) < 247.5) then-- and (self.x + dx) < 247) then
         self.x += dx
     end
 
     self.y += dy
 
-    if ((self.bottom_left.x + dx) > a and (self.bottom_left.x + dx) < b) then
+    if ((self.bottom_left.x + dx) > 0 and (self.bottom_left.x + dx) < 247.5) then --  and (self.bottom_left.x + dx) < 247) then
         self.bottom_left.x += dx
     end
 
     self.bottom_left.y += dy
 
-    if ((self.bottom_right.x + dx) > a and (self.bottom_right.x + dx) < b) then
+    if ((self.bottom_right.x + dx) > 0 and (self.bottom_right.x + dx) < 254.5) then-- and (self.bottom_right.x + dx) < 247) then
         self.bottom_right.x += dx
     end
     
     self.bottom_right.y += dy
 
-    if ((self.barrelx + dx) > a and (self.barrelx + dx) < b) then
+    if ((self.barrelx + dx) > 0 and (self.barrelx + dx) < 254.5) then
         self.barrelx += dx
     end
 
@@ -188,12 +186,13 @@ end
 function player:draw()
    spr(self.sprite, self.x, self.y, 1, 1, self.facing_left)
    spr(9, self.barrelx , self.barrely - self.barrel_rise, 1, 1)
-   print(self.health, self.x, self.y+10)
 end
 
 function player:update()
-    if (self.cm_ref != nil) then
-        self:controls()
+    if (self.cm_ref != nil and self.mm_ref.menu_open == false) then
+        if (self.cm_ref.paused != true) then
+            self:controls()
+        end
     end
 end
 
