@@ -1,7 +1,7 @@
 game_manager = {}
 game_manager.__index = game_manager
 
-function game_manager:new()
+function game_manager:new(mmr)
     local new_obj = {
         game_phase = 1,
         game_state = 1,
@@ -11,7 +11,7 @@ function game_manager:new()
         min_x = 0,
         max_x = 255,
         projectile_manager_ref,
-        player_manager_ref,
+        menu_manager_ref = mmr,
         last_player_turn = -1
     }
     setmetatable(new_obj, game_manager)
@@ -31,27 +31,37 @@ function game_manager:set_player_turn(turn_id)
 end
 
 function game_manager:update()
-    if (btnp(4)) then
-        if (self.player_turn == 1) then
-            self.player_turn = 2
-
-        else
-            self.player_turn = 1
+    if (self.menu_manager_ref.menu_open) then
+        --
+        self.menu_manager_ref:draw()
+        if (btnp(❎, 1)) then
+            self.menu_manager_ref.menu_open = false
         end
-    end
-
-    --[[
-    if (#self.projectile_manager_ref.projectiles != 0) then
-        if (self.last_player_turn == -1) then
-            self.last_player_turn = self.player_turn
-            self.player_turn = 3 --Temporary disable tank controls
-        end 
     else
-        if (self.last_player_turn != -1) then
-            self.player_turn = self.last_player_turn
-            self.last_player_turn = -1
+        if (btnp(4)) then
+            if (self.player_turn == 1) then
+                self.player_turn = 2
+
+            else
+                self.player_turn = 1
+            end
+        end
+        if (btnp(❎, 1)) then
+            self.menu_manager_ref.current_menu = 2
+            self.menu_manager_ref.menu_open = true
+            self.menu_manager_ref:draw()
+        end
+        if (#self.projectile_manager_ref.projectiles != 0) then
+            if (self.last_player_turn == -1) then
+                self.last_player_turn = self.player_turn
+                self.player_turn = 3 --Temporary disable tank controls
+            end 
+        else
+            if (self.last_player_turn != -1) then
+                self.player_turn = self.last_player_turn
+                self.last_player_turn = -1
+            end
         end
     end
-    ]]
 
 end
