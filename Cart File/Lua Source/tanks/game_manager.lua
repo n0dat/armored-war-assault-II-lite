@@ -11,6 +11,7 @@ function game_manager:new()
         min_x = 0,
         max_x = 255,
         projectile_manager_ref,
+        player_manager_ref,
         last_player_turn = -1
     }
     setmetatable(new_obj, game_manager)
@@ -38,6 +39,8 @@ function game_manager:update()
             self.player_turn = 1
         end
     end
+
+    --[[
     if (#self.projectile_manager_ref.projectiles != 0) then
         if (self.last_player_turn == -1) then
             self.last_player_turn = self.player_turn
@@ -49,5 +52,6 @@ function game_manager:update()
             self.last_player_turn = -1
         end
     end
+    ]]
 
 end
