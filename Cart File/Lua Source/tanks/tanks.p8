@@ -19,8 +19,8 @@ function _init()
 	menu_manager_obj = menu_manager:new()
 	game_manager_obj = game_manager:new(menu_manager_obj)
 	destruction_manager_obj = destruction_manager:new()
-	palt(0, false) -- draw black
-	palt(2, true) -- do not draw white
+	palt(0, false) -- do not draw black
+	palt(2, true) -- draw white
 	glbl_projectile_manager = projectile_manager:new(destruction_manager_obj)
 	glbl_player_manager = player_manager:new(game_manager_obj)
 	player_1 = player:new(15, 25, 4, 0.5, {4,5,6,7}, glbl_projectile_manager, menu_manager_obj)
@@ -74,6 +74,7 @@ function _draw()
 	-- this is the main game state
 	if (game_manager_obj:get_state() == 3) then
 		cls()
+		pal(0 ,0 ,0)
 		level_manager_obj:draw()
 		destruction_manager_obj:draw()
 		glbl_player_manager:draw()

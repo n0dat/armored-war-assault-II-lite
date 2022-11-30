@@ -15,7 +15,7 @@ end
 function menu_manager:update(g_manager)
     if (btn(❎, 1)) then
         if (self.current_menu == 1) then
-            palt(0, false)
+            palt(0, true)
             pal(1, 1, 0)
             pal(5, 5, 0)
             pal(3, 3, 0)
@@ -29,7 +29,7 @@ function menu_manager:update(g_manager)
             g_manager:set_state(3)
         end
         if (self.current_menu == 2) then
-            palt(0, false)
+            palt(0, true)
             pal(1, 1, 0)
             pal(5, 5, 0)
             pal(3, 3, 0)
