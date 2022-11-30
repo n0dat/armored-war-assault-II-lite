@@ -5,13 +5,14 @@ camera_manager.__index = camera_manager
 function camera_manager:new(init_game_manager_ref, init_projectile_manager_ref, init_players)
     local new_obj = {
         game_manager_ref = init_game_manager_ref,
-        projectile_manager_ref = init_projectile_manager_ref,
+        projectile_manager_ref = init_game_manager_ref.projectile_manager_ref,
         players = {},
         camera,
         pause_delay = 1,
         paused = false,
         pause_time
     }
+    init_players = init_game_manager_ref.player_manager_ref.players
     for i = 1, #init_players do
         add(new_obj.players, init_players[i])
     end

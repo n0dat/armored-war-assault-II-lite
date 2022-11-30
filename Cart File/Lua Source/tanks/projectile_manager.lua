@@ -1,13 +1,13 @@
 projectile_manager = {}
 projectile_manager.__index = projectile_manager
 
-function projectile_manager:new(init_destruction_manager_ref, init_camera_manager_ref, arm_time)
+function projectile_manager:new(init_game_manager_ref, arm_time)
     local new_obj = {
         projectiles = {},
         arming_time = arm_time or 0.15, --3 frames,
         split_delay = 0.5,
-        destruction_manager_ref = init_destruction_manager_ref,
-        game_manager_ref,
+        game_manager_ref = init_game_manager_ref,
+        destruction_manager_ref = init_game_manager_ref.destruction_manager_ref,
         camera_manager_ref,
     }
     setmetatable(new_obj, projectile_manager)
@@ -46,10 +46,10 @@ function projectile_manager:update_projectiles_pos()
                 self.destruction_manager_ref:add_crater(self.projectiles[i].x, self.projectiles[i].y, self.projectiles[i].power)
                 player1ref = self.game_manager_ref.player_manager_ref.players[1]
                 player2ref = self.game_manager_ref.player_manager_ref.players[2]
-                if (self.projectiles[i]:check_within_range(player1ref.x+4, player1ref.y+4)) then
+                if (self.projectiles[i]:check_within_range(player1ref.x + 4, player1ref.y + 4)) then
                     player1ref.health -= self.projectiles[i].damage
                 end
-                if (self.projectiles[i]:check_within_range(player2ref.x+4, player2ref.y+4)) then
+                if (self.projectiles[i]:check_within_range(player2ref.x + 4, player2ref.y + 4)) then
                     player2ref.health -= self.projectiles[i].damage
                 end
                 self.camera_manager_ref:pause_camera()

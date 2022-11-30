@@ -29,11 +29,13 @@ end
 
 function player_manager:update()
     local current_player_ref = self.players[self.game_manager_ref.player_turn]
+
     for i = 1, #self.players do
         if (self.players[i].health <= 0) then
-            
+
         end
     end
+
     if (current_player_ref != nil and #self.game_manager_ref.projectile_manager_ref.projectiles == 0) then 
         current_player_ref:update()
     end

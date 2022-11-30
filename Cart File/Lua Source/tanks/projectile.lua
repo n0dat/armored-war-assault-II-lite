@@ -54,9 +54,9 @@ function projectile:split(proj_man)
     end
 end
 
---Draws bounding box
+-- Draws bounding box
 function projectile:check_within_range(x_param, y_param)
     if (((self.x + self.power) > x_param) and ((self.x - self.power) < x_param) and ((self.y + self.power) > y_param) and ((self.y - self.power) < y_param)) then
-        return true;
+        return true
     end
 end

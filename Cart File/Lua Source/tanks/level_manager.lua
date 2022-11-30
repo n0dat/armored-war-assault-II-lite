@@ -4,6 +4,7 @@ level_manager.__index = level_manager
 function level_manager:new()
 	local new_obj = {
         levels = {},
+        game_manager_ref,
         cur_level
 	}
 	setmetatable(new_obj, level_manager)
@@ -71,4 +72,14 @@ function level_manager:draw()
     elseif (self.cur_level == 7) then
     elseif (self.cur_level == 8) then
     end
+end
+
+function level_manager:get_camera(level_no)
+    if (level_no != nil) then
+        ret = { self.levels[level_no].min_x, self.levels[level_no].max_x}
+        return ret
+    else
+        return nil
+    end
+
 end

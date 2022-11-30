@@ -16,46 +16,52 @@ __lua__
 #include level_manager.lua
 
 function _init()
-	menu_manager_obj = menu_manager:new()
-	game_manager_obj = game_manager:new(menu_manager_obj)
-	destruction_manager_obj = destruction_manager:new()
+	game_manager_obj = game_manager:new()
+
+	game_manager_obj.menu_manager_ref = menu_manager:new()
+	game_manager_obj.destruction_manager_ref = destruction_manager:new()
+	game_manager_obj.level_manager_ref = level_manager:new()
+	game_manager_obj.intro_ref = intro:new()
+	game_manager_obj.projectile_manager_ref = projectile_manager:new(game_manager_obj)
+	game_manager_obj.player_manager_ref = player_manager:new(game_manager_obj)
+
 	palt(0, false) -- do not draw black
 	palt(2, true) -- draw white
-	glbl_projectile_manager = projectile_manager:new(destruction_manager_obj)
-	glbl_player_manager = player_manager:new(game_manager_obj)
-	player_1 = player:new(15, 25, 4, 0.5, {4,5,6,7}, glbl_projectile_manager, menu_manager_obj)
-	player_2 = player:new(110, 25, 20, 0.5, {20,21,22,23}, glbl_projectile_manager, menu_manager_obj)
-	glbl_player_manager:add_player(player_1)
-	glbl_player_manager:add_player(player_2)
-	camera_manager_obj = camera_manager:new(game_manager_obj,glbl_projectile_manager, glbl_player_manager.players)
-	player_1.cm_ref = camera_manager_obj
-	player_2.cm_ref = camera_manager_obj
-	glbl_projectile_manager.camera_manager_ref = camera_manager_obj
-	glbl_projectile_manager.game_manager_ref = game_manager_obj
-	game_manager_obj.projectile_manager_ref = glbl_projectile_manager
-	intro_obj = intro:new()
-	level_manager_obj = level_manager:new()
-	level_manager_obj:init_levels()
-	level_manager_obj:begin_level(1, player_1, player_2)
-	level_manager_obj.cur_level = 1
-	game_manager_obj.player_manager_ref = glbl_player_manager
+
+	player_1 = player:new(15, 25, 4, 0.5, {4,5,6,7}, game_manager_obj)
+	player_2 = player:new(110, 25, 20, 0.5, {20,21,22,23}, game_manager_obj)
+
+	game_manager_obj.player_manager_ref:add_player(player_1)
+	game_manager_obj.player_manager_ref:add_player(player_2)
+
+	game_manager_obj.camera_manager_ref = camera_manager:new(game_manager_obj)
+
+	player_1.cm_ref = game_manager_obj.camera_manager_ref
+	player_2.cm_ref = game_manager_obj.camera_manager_ref
+
+	game_manager_obj.projectile_manager_ref.camera_manager_ref = game_manager_obj.camera_manager_ref
+
+	game_manager_obj.level_manager_ref:init_levels()
+	game_manager_obj.level_manager_ref:begin_level(1, player_1, player_2)
+	game_manager_obj.level_manager_ref.cur_level = 1
 end
 
 function _update60()
 	-- this is the intro state
 	if (game_manager_obj:get_state() == 1) then
-		intro_obj:update(game_manager_obj)
+		game_manager_obj.intro_ref:update(game_manager_obj)
 	end
 	-- this is the main menu state
 	if (game_manager_obj:get_state() == 2) then
-		menu_manager_obj:update(game_manager_obj)
+		game_manager_obj.menu_manager_ref:update(game_manager_obj)
 	end
 	-- this is the main game state
 	if (game_manager_obj:get_state() == 3) then
-		glbl_player_manager:update()	
-		glbl_projectile_manager:update()
-		camera_manager_obj:update()
-		print("projectiles:"..count(glbl_projectile_manager.projectiles))
+		game_manager_obj.player_manager_ref:update()	
+		game_manager_obj.projectile_manager_ref:update()
+		game_manager_obj.camera_manager_ref:update()
+
+		print("projectiles:"..count(game_manager_obj.projectile_manager_ref.projectiles))
 	end
 
 end
@@ -64,34 +70,23 @@ function _draw()
 	-- this is the intro state
 	if (game_manager_obj:get_state() == 1) then
 		cls(1)
-		intro_obj:draw()
+		game_manager_obj.intro_ref:draw()
 	end
 	-- this is the main menu state
 	if (game_manager_obj:get_state() == 2) then
 		cls(1)
 		pal()
-		menu_manager_obj:draw()
+		game_manager_obj.menu_manager_ref:draw()
 	end
 	-- this is the main game state
 	if (game_manager_obj:get_state() == 3) then
 		cls()
 		pal(0 ,0 ,0)
-		level_manager_obj:draw()
-		destruction_manager_obj:draw()
-		glbl_player_manager:draw()
-		glbl_projectile_manager:draw()
+		game_manager_obj.level_manager_ref:draw()
+		game_manager_obj.destruction_manager_ref:draw()
+		game_manager_obj.player_manager_ref:draw()
+		game_manager_obj.projectile_manager_ref:draw()
 		game_manager_obj:update()
-		print("player_2.x = "..player_2.x, camera_manager_obj.camera.cam_x, 0, 7)
-		print("player_2.y = "..player_2.y, camera_manager_obj.camera.cam_x, 8, 7)
-		print("player_2.bottom_left.y = "..player_2.bottom_left.y, camera_manager_obj.camera.cam_x, 16, 7)
-		print("player_2.bottom_right.y = "..player_2.bottom_right.y, camera_manager_obj.camera.cam_x, 24, 7)
-		print("player_2.barrelx = "..player_2.barrelx, camera_manager_obj.camera.cam_x, 32, 7)
-		print("player_2.bottom_left.x = "..player_2.bottom_left.x, camera_manager_obj.camera.cam_x, 40, 7)
-		print("player_2.bottom_right.x = "..player_2.bottom_right.x, camera_manager_obj.camera.cam_x, 48, 7)
-		print("player_2.barrely = "..player_2.barrely, camera_manager_obj.camera.cam_x, 56, 7)
-		--print("player_1.bottom_left.x = "..player_1.bottom_left.x, camera_manager_obj.camera.cam_x, 16, 0)
-		--print("player_1.bottom_right.x = "..player_1.bottom_right.x, camera_manager_obj.camera.cam_x, 24, 0)
-
 	end
 end
 
