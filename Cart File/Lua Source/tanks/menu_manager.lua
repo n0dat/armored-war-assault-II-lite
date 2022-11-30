@@ -39,6 +39,7 @@ function menu_manager:update(g_manager)
             pal(7, 7, 0)
             palt(2, true)
             pal(0, 1, 1)
+            palt(5, true)
         end
     end
 end
@@ -60,6 +61,7 @@ function menu_manager:draw()
     if (self.current_menu == 2) then
         --
         palt(0, true)
+        palt(5, false)
         --pal(1, 0, 1)
         rectfill(20, 35, 105, 79, 0)
         rect(20, 35, 105, 79, 7)

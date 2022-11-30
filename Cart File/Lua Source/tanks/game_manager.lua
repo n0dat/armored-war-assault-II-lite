@@ -12,6 +12,7 @@ function game_manager:new(mmr)
         max_x = 255,
         projectile_manager_ref,
         menu_manager_ref = mmr,
+        current_level = 1,
         last_player_turn = -1
     }
     setmetatable(new_obj, game_manager)
@@ -49,7 +50,7 @@ function game_manager:update()
         if (btnp(❎, 1)) then
             self.menu_manager_ref.current_menu = 2
             self.menu_manager_ref.menu_open = true
-            self.menu_manager_ref:draw()
+            --self.menu_manager_ref:draw()
         end
         if (#self.projectile_manager_ref.projectiles != 0) then
             if (self.last_player_turn == -1) then
