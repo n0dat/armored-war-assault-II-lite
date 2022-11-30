@@ -32,6 +32,7 @@ function player:new(x, y, sprite, init_speed, sprite_col, projectile_mngr_ref, m
         shot_power = 1,
         shot_type = 1,
         can_move = true,
+        health = 100,
         mm_ref = menu_mgr_ref,
         cm_ref
     }
@@ -186,6 +187,7 @@ end
 function player:draw()
    spr(self.sprite, self.x, self.y, 1, 1, self.facing_left)
    spr(9, self.barrelx , self.barrely - self.barrel_rise, 1, 1)
+   print(self.health, self.x, self.y+10)
 end
 
 function player:update()

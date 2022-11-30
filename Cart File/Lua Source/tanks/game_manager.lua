@@ -11,6 +11,7 @@ function game_manager:new(mmr)
         min_x = 0,
         max_x = 255,
         projectile_manager_ref,
+        player_manager_ref,
         menu_manager_ref = mmr,
         current_level = 1,
         last_player_turn = -1
@@ -52,6 +53,8 @@ function game_manager:update()
             self.menu_manager_ref.menu_open = true
             --self.menu_manager_ref:draw()
         end
+
+        --[[
         if (#self.projectile_manager_ref.projectiles != 0) then
             if (self.last_player_turn == -1) then
                 self.last_player_turn = self.player_turn
@@ -63,6 +66,7 @@ function game_manager:update()
                 self.last_player_turn = -1
             end
         end
+        ]]
     end
 
 end

@@ -38,6 +38,7 @@ function _init()
 	level_manager_obj:init_levels()
 	level_manager_obj:begin_level(1, player_1, player_2)
 	level_manager_obj.cur_level = 1
+	game_manager_obj.player_manager_ref = glbl_player_manager
 end
 
 function _update60()

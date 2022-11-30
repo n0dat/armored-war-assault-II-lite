@@ -3,7 +3,7 @@ projectile = {}
 
 projectile.__index = projectile
 
-function projectile:new(init_x, init_y, init_vel_x, init_vel_y, init_spr, proj_type, proj_dir)
+function projectile:new(init_x, init_y, init_vel_x, init_vel_y, init_spr, proj_type, proj_dir, init_power, init_damage)
     local new_obj = {
         x = init_x or 0,
         y = init_y or 0,
@@ -15,7 +15,9 @@ function projectile:new(init_x, init_y, init_vel_x, init_vel_y, init_spr, proj_t
         exploded_coords = {x, y},
         shot_type = proj_type or 1,
         is_split = false,
-        direction = proj_dir or 1
+        direction = proj_dir or 1,
+        power = init_power or 10,
+        damage = init_damage or 20
     }
     setmetatable(new_obj, projectile)
     return new_obj
@@ -49,5 +51,12 @@ function projectile:split(proj_man)
             end
 
         end
+    end
+end
+
+--Draws bounding box
+function projectile:check_within_range(x_param, y_param)
+    if (((self.x + self.power) > x_param) and ((self.x - self.power) < x_param) and ((self.y + self.power) > y_param) and ((self.y - self.power) < y_param)) then
+        return true;
     end
 end
