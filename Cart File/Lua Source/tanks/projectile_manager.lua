@@ -19,6 +19,13 @@ function projectile_manager:spawn_projectile(x, y, vel_x, vel_y, p_type, p_dir) 
     add(self.projectiles, new_projectile)
 end
 
+function projectile_manager:remove_all_projectiles()
+    --for i=1,count(self.projectiles) do
+    --    del(self.projectiles, self.projectiles[i])
+    --end
+    self.projectiles = {}
+end
+
 function projectile_manager:remove_projectile(i)
     del(self.projectiles, self.projectiles[i])
 end

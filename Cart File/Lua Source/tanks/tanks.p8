@@ -48,7 +48,7 @@ function _init()
 	game_manager_obj.level_manager_ref:init_levels()
 	game_manager_obj.level_manager_ref.cur_level = 1
 
-	game_manager_obj.round_manager_ref:set_total_rounds(3)
+	game_manager_obj.round_manager_ref:set_total_rounds(5)
 	game_manager_obj.round_manager_ref.wins_needed = flr(game_manager_obj.round_manager_ref.total_rounds / 2)
 
 
@@ -69,7 +69,9 @@ function _update60()
 		game_manager_obj:update()
 		game_manager_obj.projectile_manager_ref:update()
 		game_manager_obj.camera_manager_ref:update()
-		game_manager_obj.player_manager_ref.players[2].health = game_manager_obj.level_manager_ref.cur_level
+	end
+	-- this is the end game state
+	if (game_manager_obj:get_state() == 4) then
 	end
 end
 
@@ -93,6 +95,9 @@ function _draw()
 		game_manager_obj.player_manager_ref:draw()
 		game_manager_obj.projectile_manager_ref:draw()
 		--print("projectiles: "..count(game_manager_obj.projectile_manager_ref.projectiles), 1)
+	end
+	-- this is the end game state
+	if (game_manager_obj:get_state() == 4) then
 	end
 end
 

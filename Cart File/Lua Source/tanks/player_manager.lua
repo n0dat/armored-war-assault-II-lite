@@ -36,11 +36,23 @@ function player_manager:update()
 
     for i = 1, #self.players do
         if (self.players[i].health <= 0) then
-            if (not self.game_manager_ref.round_manager_ref:is_round_over(self.round) and self.round < 3) then
-                self.game_manager_ref.round_manager_ref:round_winner(i, self.round)
+            if (not self.game_manager_ref.round_manager_ref:is_round_over()) then
+                self.game_manager_ref.projectile_manager_ref:remove_all_projectiles()
+                self.game_manager_ref.destruction_manager_ref:clear_craters()
+                self.game_manager_ref.round_manager_ref:round_winner(i)
+
                 self.game_manager_ref.round_manager_ref.cur_round = self.round + 1
                 self.game_manager_ref.level_manager_ref.cur_level = self.round + 1
+
+                if (i == 1) then
+                    self.game_manager_ref.player_turn = 2
+                elseif (i == 2) then
+                    self.game_manager_ref.player_turn = 1
+                end
+
                 self.game_manager_ref.players_set = false
+                self.players[i].health = 100
+                return
             end
         end
     end
