@@ -40,13 +40,13 @@ function projectile:split(proj_man)
     if (self.is_split == false and self.shot_type == 2) then
         if (self.is_armed and (time() - self.spawn_time > 0.50)) then
             if (self.direction ==  1) then
-                proj_man:spawn_projectile(self.x+2, self.y, self.vel.x * 1.15, self.vel.y * 1.15, 2, 1)
-                proj_man:spawn_projectile(self.x-2, self.y, self.vel.x * 0.85, self.vel.y * 0.85, 2, 1)
+                proj_man:spawn_projectile(self.x+2, self.y, self.vel.x * 1.15, self.vel.y * 1.15, 1, 1)
+                proj_man:spawn_projectile(self.x-2, self.y, self.vel.x * 0.85, self.vel.y * 0.85, 1, 1)
                 self.is_split = true
 
             else
-                proj_man:spawn_projectile(self.x-2, self.y, self.vel.x * 1.15, self.vel.y * 1.15, 2, 0)
-                proj_man:spawn_projectile(self.x+2, self.y, self.vel.x * 0.85, self.vel.y * 0.85, 2, 0)
+                proj_man:spawn_projectile(self.x-2, self.y, self.vel.x * 1.15, self.vel.y * 1.15, 1, 0)
+                proj_man:spawn_projectile(self.x+2, self.y, self.vel.x * 0.85, self.vel.y * 0.85, 1, 0)
                 self.is_split = true
             end
 

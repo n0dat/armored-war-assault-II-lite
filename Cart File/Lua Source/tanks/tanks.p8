@@ -16,8 +16,10 @@ __lua__
 #include level_manager.lua
 
 function _init()
+
 	game_manager_obj = game_manager:new()
 
+	-- adding all references
 	game_manager_obj.menu_manager_ref = menu_manager:new()
 	game_manager_obj.destruction_manager_ref = destruction_manager:new()
 	game_manager_obj.level_manager_ref = level_manager:new()
@@ -25,11 +27,11 @@ function _init()
 	game_manager_obj.projectile_manager_ref = projectile_manager:new(game_manager_obj)
 	game_manager_obj.player_manager_ref = player_manager:new(game_manager_obj)
 
-	palt(0, false) -- do not draw black
-	palt(2, true) -- draw white
+	--palt(0, false) -- do not draw black
+	--palt(2, true) -- draw white
 
-	player_1 = player:new(15, 25, 4, 0.5, {4,5,6,7}, game_manager_obj)
-	player_2 = player:new(110, 25, 20, 0.5, {20,21,22,23}, game_manager_obj)
+	player_1 = player:new(4, 0.5, {4,5,6,7}, game_manager_obj, 1)
+	player_2 = player:new(20, 0.5, {20,21,22,23}, game_manager_obj, 2)
 
 	game_manager_obj.player_manager_ref:add_player(player_1)
 	game_manager_obj.player_manager_ref:add_player(player_2)
@@ -42,7 +44,7 @@ function _init()
 	game_manager_obj.projectile_manager_ref.camera_manager_ref = game_manager_obj.camera_manager_ref
 
 	game_manager_obj.level_manager_ref:init_levels()
-	--game_manager_obj.level_manager_ref:begin_level(1, player_1, player_2)
+	game_manager_obj.level_manager_ref.cur_level = 1
 	game_manager_obj:set_players()
 end
 
@@ -60,10 +62,7 @@ function _update60()
 		game_manager_obj.player_manager_ref:update()	
 		game_manager_obj.projectile_manager_ref:update()
 		game_manager_obj.camera_manager_ref:update()
-
-		print("projectiles:"..count(game_manager_obj.projectile_manager_ref.projectiles))
 	end
-
 end
 
 function _draw()
@@ -81,12 +80,12 @@ function _draw()
 	-- this is the main game state
 	if (game_manager_obj:get_state() == 3) then
 		cls()
-		pal(0 ,0 ,0)
 		game_manager_obj.level_manager_ref:draw()
 		game_manager_obj.destruction_manager_ref:draw()
 		game_manager_obj.player_manager_ref:draw()
 		game_manager_obj.projectile_manager_ref:draw()
 		game_manager_obj:update()
+		--print("projectiles: "..count(game_manager_obj.projectile_manager_ref.projectiles), 1)
 	end
 end
 

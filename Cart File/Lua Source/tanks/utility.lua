@@ -1,8 +1,10 @@
 bullet_grav_const = 0.01
 sky_color = 12
+ground_color_sand = 15
+ground_color_grass = 3
         
 function is_solid(x, y, solid_color)
-	if (pget(x, y) == solid_color) then
+	if (pget(x, y) == ground_color_sand or pget(x, y) == ground_color_grass) then
 		return true
 	else
 		return false

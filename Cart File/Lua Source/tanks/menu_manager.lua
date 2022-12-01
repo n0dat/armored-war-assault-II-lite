@@ -26,6 +26,7 @@ function menu_manager:update(g_manager)
             self.intro_over = true
             palt(2, true)
             pal(0, 1, 1)
+            pal(0, 0, 1)
             g_manager:set_state(3)
         end
         if (self.current_menu == 2) then
@@ -39,6 +40,7 @@ function menu_manager:update(g_manager)
             pal(7, 7, 0)
             palt(2, true)
             pal(0, 1, 1)
+            pal(1, 1, 1)
             palt(5, true)
         end
     end

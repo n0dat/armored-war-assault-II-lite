@@ -45,31 +45,16 @@ function game_manager:set_players()
         player2_ref.x = x2
         player2_ref.y = y2
 
-        --brx1 = x1 + 7
-        --bry1 = y1 + 2
-        --brx2 = x2 + 7
-        --bry2 = y2 + 2
-
         player1_ref.barrelx = x1 + 7
         player1_ref.barrely = y1 + 2
 
         player2_ref.barrelx = x2 + 7
         player2_ref.barrely = y2 + 2
 
-        --btlx1 = x1
-        --btly1 = y1 + 7
-        --btrx1 = x1 + 7
-        --btry1 = y1 + 7
-
         player1_ref.bottom_left.x = x1
         player1_ref.bottom_left.y = y1 + 7
         player1_ref.bottom_right.x = x1 + 7
         player1_ref.bottom_right.y = y1 + 7
-
-        --btlx2 = x2
-        --btly2 = y2 + 7
-        --btrx2 = x2 + 7
-        --btry2 = y2 + 7
 
         player2_ref.bottom_left.x = x2
         player2_ref.bottom_left.y = y2 + 7
