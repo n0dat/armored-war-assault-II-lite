@@ -9,7 +9,8 @@ player_manager.__index = player_manager
 function player_manager:new(init_game_manager_ref)
     local new_obj = {
         players = {},
-        game_manager_ref = init_game_manager_ref
+        game_manager_ref = init_game_manager_ref,
+        round,
     }
     setmetatable(new_obj, player_manager) 
     return new_obj
@@ -28,11 +29,19 @@ function player_manager:add_player_cmr(cam_mgr_ref)
 end
 
 function player_manager:update()
+
+    self.round = self.game_manager_ref.round_manager_ref.cur_round
+
     local current_player_ref = self.players[self.game_manager_ref.player_turn]
 
     for i = 1, #self.players do
         if (self.players[i].health <= 0) then
-
+            if (not self.game_manager_ref.round_manager_ref:is_round_over(self.round) and self.round < 3) then
+                self.game_manager_ref.round_manager_ref:round_winner(i, self.round)
+                self.game_manager_ref.round_manager_ref.cur_round = self.round + 1
+                self.game_manager_ref.level_manager_ref.cur_level = self.round + 1
+                self.game_manager_ref.players_set = false
+            end
         end
     end
 

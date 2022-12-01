@@ -14,6 +14,7 @@ __lua__
 #include intro.lua
 #include menu_manager.lua
 #include level_manager.lua
+#include round_manager.lua
 
 function _init()
 
@@ -26,6 +27,7 @@ function _init()
 	game_manager_obj.intro_ref = intro:new()
 	game_manager_obj.projectile_manager_ref = projectile_manager:new(game_manager_obj)
 	game_manager_obj.player_manager_ref = player_manager:new(game_manager_obj)
+	game_manager_obj.round_manager_ref = round_manager:new(game_manager_obj)
 
 	--palt(0, false) -- do not draw black
 	--palt(2, true) -- draw white
@@ -45,7 +47,11 @@ function _init()
 
 	game_manager_obj.level_manager_ref:init_levels()
 	game_manager_obj.level_manager_ref.cur_level = 1
-	game_manager_obj:set_players()
+
+	game_manager_obj.round_manager_ref:set_total_rounds(3)
+	game_manager_obj.round_manager_ref.wins_needed = flr(game_manager_obj.round_manager_ref.total_rounds / 2)
+
+
 end
 
 function _update60()
@@ -60,8 +66,10 @@ function _update60()
 	-- this is the main game state
 	if (game_manager_obj:get_state() == 3) then
 		game_manager_obj.player_manager_ref:update()	
+		game_manager_obj:update()
 		game_manager_obj.projectile_manager_ref:update()
 		game_manager_obj.camera_manager_ref:update()
+		game_manager_obj.player_manager_ref.players[2].health = game_manager_obj.level_manager_ref.cur_level
 	end
 end
 
@@ -84,7 +92,6 @@ function _draw()
 		game_manager_obj.destruction_manager_ref:draw()
 		game_manager_obj.player_manager_ref:draw()
 		game_manager_obj.projectile_manager_ref:draw()
-		game_manager_obj:update()
 		--print("projectiles: "..count(game_manager_obj.projectile_manager_ref.projectiles), 1)
 	end
 end
