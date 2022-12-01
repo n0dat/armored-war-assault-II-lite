@@ -5,7 +5,7 @@ function level_manager:new()
 	local new_obj = {
         levels = {},
         game_manager_ref,
-        cur_level
+        cur_level = 1
 	}
 	setmetatable(new_obj, level_manager)
 	return new_obj
@@ -26,7 +26,7 @@ function level_manager:init_levels()
     -- p1 x, p1 y, p2 x, p2 y, top left map tiles (x), top left map tiles (y), length, height, left x, right x, top y, bottom y
     l1_p1 = {x = 2, y = 62.5, barx = 9, bary = 64.5, botlx = 2, botly = 69.5, botrx = 9, botry = 69.5}
     l1_p2 = {x = 246, y = 62.5, barx = 253, bary = 64.5, botlx = 246, botly = 69.5, botrx = 253, botry = 69.5}
-    self.levels[1] = {p1 = l1_p1, p2 = l1_p2, tx=0, ty=0, w=32, h=16, min_x=0, max_x=255, max_y=0, min_y=122}
+    self.levels[1] = {p1 = {x = 2, y = 62.5}, p2 = {x = 246, y = 62.5}, tx=0, ty=0, w=32, h=16, min_x=0, max_x=255, max_y=0, min_y=122}
     --level_2
     --level_3
     --level_4

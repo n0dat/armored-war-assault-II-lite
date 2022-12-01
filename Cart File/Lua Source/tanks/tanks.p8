@@ -42,8 +42,8 @@ function _init()
 	game_manager_obj.projectile_manager_ref.camera_manager_ref = game_manager_obj.camera_manager_ref
 
 	game_manager_obj.level_manager_ref:init_levels()
-	game_manager_obj.level_manager_ref:begin_level(1, player_1, player_2)
-	game_manager_obj.level_manager_ref.cur_level = 1
+	--game_manager_obj.level_manager_ref:begin_level(1, player_1, player_2)
+	game_manager_obj:set_players()
 end
 
 function _update60()
