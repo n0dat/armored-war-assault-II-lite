@@ -1,11 +1,12 @@
 menu_manager = {}
 menu_manager.__index = menu_manager
 
-function menu_manager:new()
+function menu_manager:new(init_game_manager_ref)
     -- main = 1
     -- shop = 2
 	local new_obj = {
         current_menu = 1,
+        game_manager_ref = init_game_manager_ref,
         menu_open = false
 	}
 	setmetatable(new_obj, menu_manager)
@@ -28,8 +29,7 @@ function menu_manager:update(g_manager)
             pal(0, 1, 1)
             pal(0, 0, 1)
             g_manager:set_state(3)
-        end
-        if (self.current_menu == 2) then
+        elseif (self.current_menu == 2) then
             palt(0, true)
             pal(1, 1, 0)
             pal(5, 5, 0)
@@ -42,8 +42,20 @@ function menu_manager:update(g_manager)
             pal(0, 1, 1)
             pal(1, 1, 1)
             palt(5, true)
+            g_manager:set_state(3)
         end
     end
+
+    if (btn(❎, 0) and self.current_menu == 3) then
+        g_manager:set_state(2)
+        self.current_menu = 1
+    end
+
+    if (btn(🅾️, 0) and self.current_menu == 3) then
+        g_manager:set_state(3)
+        self.current_menu = 2
+    end
+
 end
 
 function menu_manager:draw()
@@ -58,20 +70,26 @@ function menu_manager:draw()
         print("armored war assault", 25, 40, 7)
         print("ii lite", 50, 50, 7)
         print("press q to start", 30, 70, 7)
-    end
-
-    if (self.current_menu == 2) then
+    elseif (self.current_menu == 2) then
         --
         palt(0, true)
         palt(5, false)
         --pal(1, 0, 1)
         rectfill(20, 35, 105, 79, 0)
-        rect(20, 35, 105, 79, 7)
-        rect(32, 62, 92, 62, 7)
+        rect(self.game_manager_ref.camera_manager_ref.camera.cam_x,35,105,79,7) -- 20
+        rect(self.game_manager_ref.camera_manager_ref.camera.cam_x,62,92,62,7) -- 32
 
-        print("armored war assault", 25, 40, 7)
+        print("armored war assault poggers", 25, 40, 8)
         print("ii lite", 50, 50, 7)
         print("this is a pause menu", 30, 70, 7)
+    elseif (self.current_menu == 3) then
+        --
+        rectfill(self.game_manager_ref.camera_manager_ref.camera.cam_x, 35, 105, 79, 7) -- top left x = 20
+
+        print("player "..self.game_manager_ref.game_winner, self.game_manager_ref.camera_manager_ref.camera.cam_x+5, 40, 8) -- x = 25
+        print("wins!", self.game_manager_ref.camera_manager_ref.camera.cam_x + 5,50,8) -- 
+        print("❎ to leave or", self.game_manager_ref.camera_manager_ref.camera.cam_x + 5, 60, 8) -- 
+        print("🅾️ to play again", self.game_manager_ref.camera_manager_ref.camera.cam_x + 5, 70, 8) -- 
     end
 end
 

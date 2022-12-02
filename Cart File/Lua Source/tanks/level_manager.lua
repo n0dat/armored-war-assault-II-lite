@@ -26,16 +26,23 @@ function level_manager:init_levels()
     -- p1 x, p1 y, p2 x, p2 y, top left map tiles (x), top left map tiles (y), length, height, left x, right x, top y, bottom y
 
     -- grouped together based on layout on the map
+
+    -- min_x = 0, 256, 512
+    -- max_x = 255, 511, 767
+
+    -- min_y = 127 ,, 255 ,, 383
+    -- max_y = 0 ,, 136 ,, 272
+
     self.levels[1] = {p1 = {x = 2, y = 62.5}, p2 = {x = 246, y = 62.5}, tx=0, ty=0, w=32, h=16, min_x=0, max_x=255, max_y=0, min_y=127}
-    self.levels[2] = {p1 = {x = 2, y = 62.5}, p2 = {x = 246, y = 92.5}, tx=33, ty=0, w=32, h=16, min_x=256, max_x=511, max_y=0, min_y=127}
-    self.levels[5] = {p1 = {x = 2, y = 32.5}, p2 = {x = 246, y = 32.5}, tx=66, ty=0, w=32, h=16, min_x=512, max_x=767, max_y=0, min_y=127}
+    self.levels[2] = {p1 = {x = 2, y = 62.5}, p2 = {x = 246, y = 92.5}, tx=33, ty=0, w=32, h=16, min_x=0, max_x=255, max_y=0, min_y=127}
+    self.levels[5] = {p1 = {x = 2, y = 32.5}, p2 = {x = 246, y = 32.5}, tx=66, ty=0, w=32, h=16, min_x=0, max_x=255, max_y=0, min_y=127}
 
-    self.levels[3] = {p1 = {x = 2, y = 72.5}, p2 = {x = 246, y = 72.5}, tx=0, ty=17, w=32, h=16, min_x=0, max_x=255, max_y=136, min_y=255}
-    self.levels[4] = {p1 = {x = 2, y = 92.5}, p2 = {x = 246, y = 22.5}, tx=33, ty=17, w=32, h=16, min_x=256, max_x=511, max_y=136, min_y=255}
-    self.levels[6] = {p1 = {x = 2, y = 32.5}, p2 = {x = 246, y = 32.5}, tx=66, ty=17, w=32, h=16, min_x=512, max_x=767, max_y=136, min_y=255}
+    self.levels[3] = {p1 = {x = 2, y = 72.5}, p2 = {x = 246, y = 72.5}, tx=0, ty=17, w=32, h=16, min_x=0, max_x=255, max_y=0, min_y=127}
+    self.levels[4] = {p1 = {x = 2, y = 92.5}, p2 = {x = 246, y = 22.5}, tx=33, ty=17, w=32, h=16, min_x=0, max_x=255, max_y=0, min_y=127}
+    self.levels[6] = {p1 = {x = 2, y = 32.5}, p2 = {x = 246, y = 32.5}, tx=66, ty=17, w=32, h=16, min_x=0, max_x=255, max_y=0, min_y=127}
 
-    self.levels[7] = {p1 = {x = 2, y = 32.5}, p2 = {x = 246, y = 32.5}, tx=0, ty=34, w=32, h=16, min_x=0, max_x=255, max_y=272, min_y=383}
-    self.levels[8] = {p1 = {x = 2, y = 32.5}, p2 = {x = 246, y = 32.5}, tx=33, ty=34, w=32, h=16, min_x=256, max_x=511, max_y=272, min_y=383}
+    self.levels[7] = {p1 = {x = 2, y = 32.5}, p2 = {x = 246, y = 32.5}, tx=0, ty=34, w=32, h=16, min_x=0, max_x=255, max_y=0, min_y=127}
+    self.levels[8] = {p1 = {x = 2, y = 32.5}, p2 = {x = 246, y = 32.5}, tx=33, ty=34, w=32, h=16, min_x=0, max_x=255, max_y=0, min_y=127}
     
 end
 

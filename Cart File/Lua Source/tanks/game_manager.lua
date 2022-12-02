@@ -26,45 +26,48 @@ function game_manager:new()
 end
 
 function game_manager:set_state(state)
-	self.game_state = state
+	if (state != nil) then
+		self.game_state = state
+	end
 end
 
 function game_manager:set_players()
-	if (self.level_manager_ref != nil) then
+	if (self.players_set == false) then
+		if (self.level_manager_ref != nil) then
 
-		player1_ref = self.player_manager_ref.players[1]
-		player2_ref = self.player_manager_ref.players[2]
+			player1_ref = self.player_manager_ref.players[1]
+			player2_ref = self.player_manager_ref.players[2]
 
-		x1 = self.level_manager_ref.levels[self.level_manager_ref.cur_level].p1.x
-		y1 = self.level_manager_ref.levels[self.level_manager_ref.cur_level].p1.y
-		x2 = self.level_manager_ref.levels[self.level_manager_ref.cur_level].p2.x
-		y2 = self.level_manager_ref.levels[self.level_manager_ref.cur_level].p2.y
+			x1 = self.level_manager_ref.levels[self.level_manager_ref.cur_level].p1.x
+			y1 = self.level_manager_ref.levels[self.level_manager_ref.cur_level].p1.y
+			x2 = self.level_manager_ref.levels[self.level_manager_ref.cur_level].p2.x
+			y2 = self.level_manager_ref.levels[self.level_manager_ref.cur_level].p2.y
 
-		player1_ref.x = x1
-		player1_ref.y = y1
+			player1_ref.x = x1
+			player1_ref.y = y1
 
-		player2_ref.x = x2
-		player2_ref.y = y2
+			player2_ref.x = x2
+			player2_ref.y = y2
 
-		player1_ref.barrelx = x1 + 7
-		player1_ref.barrely = y1 + 2
+			player1_ref.barrelx = x1 + 7
+			player1_ref.barrely = y1 + 2
 
-		player2_ref.barrelx = x2 + 7
-		player2_ref.barrely = y2 + 2
+			player2_ref.barrelx = x2 + 7
+			player2_ref.barrely = y2 + 2
 
-		player1_ref.bottom_left.x = x1
-		player1_ref.bottom_left.y = y1 + 7
-		player1_ref.bottom_right.x = x1 + 7
-		player1_ref.bottom_right.y = y1 + 7
+			player1_ref.bottom_left.x = x1
+			player1_ref.bottom_left.y = y1 + 7
+			player1_ref.bottom_right.x = x1 + 7
+			player1_ref.bottom_right.y = y1 + 7
 
-		player2_ref.bottom_left.x = x2
-		player2_ref.bottom_left.y = y2 + 7
-		player2_ref.bottom_right.x = x2 + 7
-		player2_ref.bottom_right.y = y2 + 7
+			player2_ref.bottom_left.x = x2
+			player2_ref.bottom_left.y = y2 + 7
+			player2_ref.bottom_right.x = x2 + 7
+			player2_ref.bottom_right.y = y2 + 7
 
-		self.player_manager_ref.players[1] = player1_ref
-		self.player_manager_ref.players[2] = player2_ref
-
+			self.player_manager_ref.players[1] = player1_ref
+			self.player_manager_ref.players[2] = player2_ref
+		end
 	end
 end
 
@@ -77,6 +80,25 @@ function game_manager:set_player_turn(turn_id)
 end
 
 function game_manager:update()
+	
+--	if (self.round_manager_ref.cur_round == 1 and self.round_manager_ref.total_rounds == 1 and self.game_winner != 0) then
+--		self.round_manager_ref.cur_round = 1
+--		self.level_manager_ref.cur_level = 1
+--		self:set_state(1)
+--		self.menu_manager_ref.menu_open = false
+--		self.camera_manager.ref:reset()
+--		self.players_set = false
+--		self.intro_ref:reset()
+	if (self.round_manager_ref.cur_round > self.round_manager_ref.total_rounds) then
+		self.round_manager_ref.cur_round = 1
+		self.level_manager_ref.cur_level = 1
+		--self:set_state(4)
+		self.menu_manager_ref.current_menu = 3
+		self.menu_manager_ref.menu_open = false
+		self.camera_manager_ref:reset()
+		self.players_set = false
+		self.intro_ref:reset()
+	end
 
 	if (self.players_set == false) then
 		self:set_players()
@@ -97,7 +119,7 @@ function game_manager:update()
 			end
 		end
 		if (btnp(❎, 1)) then
-			self.menu_manager_ref.current_menu = 2
+			self.menu_manager_ref.current_menu = 3
 			self.menu_manager_ref.menu_open = true
 		end
 	end

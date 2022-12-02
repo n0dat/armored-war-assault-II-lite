@@ -177,7 +177,7 @@ end
 function player:draw()
 	spr(self.sprite, self.x, self.y, 1, 1, self.facing_left)
 	spr(9, self.barrelx , self.barrely - self.barrel_rise, 1, 1)
-	print(self.health, self.x, self.y + 10, 1)
+	print(self.health, self.x - 1, self.y + 10, 1)
 end
 
 function player:update()

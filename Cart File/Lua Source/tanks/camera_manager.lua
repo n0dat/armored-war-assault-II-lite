@@ -10,6 +10,7 @@ function camera_manager:new(init_game_manager_ref, init_projectile_manager_ref, 
         camera,
         pause_delay = 1,
         paused = false,
+        init_pos = {x = 0, y = 0},
         pause_time
     }
     init_players = init_game_manager_ref.player_manager_ref.players
@@ -19,6 +20,24 @@ function camera_manager:new(init_game_manager_ref, init_projectile_manager_ref, 
     new_obj.camera = camera_class:new(new_obj.players[new_obj.game_manager_ref.player_turn].x, new_obj.game_manager_ref.cam_y, new_obj.game_manager_ref.min_x, new_obj.game_manager_ref.max_x)
     setmetatable(new_obj, camera_manager)
     return new_obj
+end
+
+function camera_manager:get_pos()
+    return {x = self.init_pos.x, y = self.init_pos.y}
+end
+
+function camera_manager:reset()
+    self.camera.cam_x = 0
+    self.camera.cam_y = 0
+    self.paused = false
+    self:update()
+end
+
+function camera_manager:set_init_pos(x, y)
+    if (x != nil and y != nil) then
+        self.init_pos.x = x
+        self.init_pos.y = y
+    end
 end
 
 function camera_manager:update()

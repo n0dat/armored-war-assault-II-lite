@@ -39,15 +39,17 @@ function player_manager:update()
             if (not self.game_manager_ref.round_manager_ref:is_round_over()) then
                 self.game_manager_ref.projectile_manager_ref:remove_all_projectiles()
                 self.game_manager_ref.destruction_manager_ref:clear_craters()
-                self.game_manager_ref.round_manager_ref:round_winner(i)
+                self.game_manager_ref.camera_manager_ref:reset()
 
-                self.game_manager_ref.round_manager_ref.cur_round = self.round + 1
-                self.game_manager_ref.level_manager_ref.cur_level = self.round + 1
+                self.game_manager_ref.round_manager_ref.cur_round += 1
+                self.game_manager_ref.level_manager_ref.cur_level += 1
 
                 if (i == 1) then
                     self.game_manager_ref.player_turn = 2
+                    self.game_manager_ref.round_manager_ref:round_winner(2)
                 elseif (i == 2) then
                     self.game_manager_ref.player_turn = 1
+                    self.game_manager_ref.round_manager_ref:round_winner(1)
                 end
 
                 self.game_manager_ref.players_set = false

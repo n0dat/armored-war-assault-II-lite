@@ -4,12 +4,20 @@ intro.__index = intro
 function intro:new()
 	local new_obj = {
 		intro_frame_count = 0,
-		show_intro = false,
+		show_intro = true,
 		intro_over = false,
 		next_scene = 0
 	}
 	setmetatable(new_obj, intro)
 	return new_obj
+end
+
+function intro:reset()
+	self.intro_frame_count = 0
+	self.show_intro = true
+	self.intro_over = false
+	self.next_scene = 0
+
 end
 
 function intro:update(game_manager)
@@ -22,8 +30,8 @@ end
 
 function intro:draw()
 	spr (42,55,45,2,2)
-	if not self.intro then
-		self.intro = true
+	if self.show_intro then
+		self.show_intro = false
 		pal(1, 0, 1)
 		pal(3, 0, 1)
 		pal(9, 0, 1)

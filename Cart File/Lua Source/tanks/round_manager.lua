@@ -43,14 +43,14 @@ function round_manager:round_winner(winner)
             self.total_wins.p1 += 1
             if (self.total_wins.p1 > self.wins_needed) then
                 self.game_manager_ref.game_winner = 1
-                self.gamee_manager_ref.set_state(4)
+                self.game_manager_ref.set_state(4)
             end
         end
         if (winner == 2) then
             self.total_wins.p2 += 1
             if (self.total_wins.p2 > self.wins_needed) then
                 self.game_manager_ref.game_winner = 2
-                self.gamee_manager_ref.set_state(4)
+                self.game_manager_ref.set_state(4)
             end
         end
         self:end_round()

@@ -21,7 +21,7 @@ function _init()
 	game_manager_obj = game_manager:new()
 
 	-- adding all references
-	game_manager_obj.menu_manager_ref = menu_manager:new()
+	game_manager_obj.menu_manager_ref = menu_manager:new(game_manager_obj)
 	game_manager_obj.destruction_manager_ref = destruction_manager:new()
 	game_manager_obj.level_manager_ref = level_manager:new()
 	game_manager_obj.intro_ref = intro:new()
@@ -48,8 +48,10 @@ function _init()
 	game_manager_obj.level_manager_ref:init_levels()
 	game_manager_obj.level_manager_ref.cur_level = 1
 
-	game_manager_obj.round_manager_ref:set_total_rounds(5)
+	game_manager_obj.round_manager_ref:set_total_rounds(1)
 	game_manager_obj.round_manager_ref.wins_needed = flr(game_manager_obj.round_manager_ref.total_rounds / 2)
+
+	game_manager_obj.camera_manager_ref:set_init_pos(game_manager_obj.camera_manager_ref.camera.cam_x, game_manager_obj.camera_manager_ref.camera.cam_y)
 
 
 end
@@ -57,6 +59,7 @@ end
 function _update60()
 	-- this is the intro state
 	if (game_manager_obj:get_state() == 1) then
+		--game_manager_obj:update()
 		game_manager_obj.intro_ref:update(game_manager_obj)
 	end
 	-- this is the main menu state
@@ -65,13 +68,19 @@ function _update60()
 	end
 	-- this is the main game state
 	if (game_manager_obj:get_state() == 3) then
-		game_manager_obj.player_manager_ref:update()	
 		game_manager_obj:update()
+		game_manager_obj.player_manager_ref:update()	
 		game_manager_obj.projectile_manager_ref:update()
 		game_manager_obj.camera_manager_ref:update()
+
+		if (game_manager_obj.game_winner != 0) then
+			game_manager_obj:set_state(4)
+		end
 	end
 	-- this is the end game state
 	if (game_manager_obj:get_state() == 4) then
+		--game_manager_obj:update()
+		game_manager_obj.menu_manager_ref:update(game_manager_obj)
 	end
 end
 
@@ -80,12 +89,32 @@ function _draw()
 	if (game_manager_obj:get_state() == 1) then
 		cls(1)
 		game_manager_obj.intro_ref:draw()
+		print("state: "..game_manager_obj.game_state, game_manager_obj.camera_manager_ref.init_pos.x, 24, 8)
+		if (game_manager_obj.game_winner != 0) then
+			print("level: "..game_manager_obj.level_manager_ref.cur_level, game_manager_obj.camera_manager_ref.camera.cam_x, 0, 8)
+			print("cam_x: "..game_manager_obj.camera_manager_ref.camera.cam_x, game_manager_obj.camera_manager_ref.camera.cam_x, 8, 8)
+			print("cam_y: "..game_manager_obj.camera_manager_ref.camera.cam_y, game_manager_obj.camera_manager_ref.camera.cam_x, 16, 8)
+		else
+			print("level: "..game_manager_obj.level_manager_ref.cur_level, game_manager_obj.camera_manager_ref.init_pos.x, 0, 8)
+			print("cam_x: "..game_manager_obj.camera_manager_ref.init_pos.x, game_manager_obj.camera_manager_ref.init_pos.x, 8, 8)
+			print("cam_y: "..game_manager_obj.camera_manager_ref.init_pos.y, game_manager_obj.camera_manager_ref.init_pos.x, 16, 8)	
+		end
 	end
 	-- this is the main menu state
 	if (game_manager_obj:get_state() == 2) then
 		cls(1)
 		pal()
 		game_manager_obj.menu_manager_ref:draw()
+		print("state: "..game_manager_obj.game_state, game_manager_obj.camera_manager_ref.init_pos.x, 24, 8)
+		if (game_manager_obj.game_winner != 0) then
+			print("level: "..game_manager_obj.level_manager_ref.cur_level, game_manager_obj.camera_manager_ref.camera.cam_x, 0, 8)
+			print("cam_x: "..game_manager_obj.camera_manager_ref.camera.cam_x, game_manager_obj.camera_manager_ref.camera.cam_x, 8, 8)
+			print("cam_y: "..game_manager_obj.camera_manager_ref.camera.cam_y, game_manager_obj.camera_manager_ref.camera.cam_x, 16, 8)
+		else
+			print("level: "..game_manager_obj.level_manager_ref.cur_level, game_manager_obj.camera_manager_ref.init_pos.x, 0, 8)
+			print("cam_x: "..game_manager_obj.camera_manager_ref.init_pos.x, game_manager_obj.camera_manager_ref.init_pos.x, 8, 8)
+			print("cam_y: "..game_manager_obj.camera_manager_ref.init_pos.y, game_manager_obj.camera_manager_ref.init_pos.x, 16, 8)	
+		end
 	end
 	-- this is the main game state
 	if (game_manager_obj:get_state() == 3) then
@@ -94,10 +123,19 @@ function _draw()
 		game_manager_obj.destruction_manager_ref:draw()
 		game_manager_obj.player_manager_ref:draw()
 		game_manager_obj.projectile_manager_ref:draw()
-		--print("projectiles: "..count(game_manager_obj.projectile_manager_ref.projectiles), 1)
+		print("level: "..game_manager_obj.level_manager_ref.cur_level, game_manager_obj.camera_manager_ref.camera.cam_x, 0, 8)
+		print("cam_x: "..game_manager_obj.camera_manager_ref.camera.cam_x, game_manager_obj.camera_manager_ref.camera.cam_x, 8, 8)
+		print("cam_y: "..game_manager_obj.camera_manager_ref.camera.cam_y, game_manager_obj.camera_manager_ref.camera.cam_x, 16, 8)
+		print("prev game winner: "..game_manager_obj.game_winner, game_manager_obj.camera_manager_ref.camera.cam_x, 24, 8)
+		print("round: "..game_manager_obj.round_manager_ref.cur_round, game_manager_obj.camera_manager_ref.camera.cam_x, 32, 8)
 	end
 	-- this is the end game state
 	if (game_manager_obj:get_state() == 4) then
+		cls(1)
+		game_manager_obj.menu_manager_ref:draw()
+		print("level: "..game_manager_obj.level_manager_ref.cur_level, game_manager_obj.camera_manager_ref.camera.cam_x, 0, 8)
+		print("cam_x: "..game_manager_obj.camera_manager_ref.camera.cam_x, game_manager_obj.camera_manager_ref.camera.cam_x, 8, 8)
+		print("cam_y: "..game_manager_obj.camera_manager_ref.camera.cam_y, game_manager_obj.camera_manager_ref.camera.cam_x, 16, 8)
 	end
 end
 
