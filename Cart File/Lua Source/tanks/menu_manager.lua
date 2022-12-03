@@ -112,13 +112,21 @@ function menu_manager:draw()
         print("this is a pause menu", 30, 70, 7)
     elseif (self.current_menu == 3) then
         --
+
+        winner = self.game_manager_ref.game_winner
+
         rectfill(self.game_manager_ref.camera_manager_ref.camera.cam_x + 5, 35, self.game_manager_ref.camera_manager_ref.camera.cam_x+105, 79, 7) -- top left x = 20
 
-        print("player "..self.game_manager_ref.game_winner, self.game_manager_ref.camera_manager_ref.camera.cam_x+10, 40, 8) -- x = 25
+        if (winner == 0) then
+            print("its a draw!", self.game_manager_ref.camera_manager_ref.camera.cam_x + 10, 40, 8)
+        else
+            print("player "..winner.." wins!", self.game_manager_ref.camera_manager_ref.camera.cam_x+10, 40, 8) -- x = 25
+            --print("wins!", self.game_manager_ref.camera_manager_ref.camera.cam_x+10,50,8) -- 
+        end
 
-        print("wins!", self.game_manager_ref.camera_manager_ref.camera.cam_x+10,50,8) -- 
         print("❎ to leave or", self.game_manager_ref.camera_manager_ref.camera.cam_x+10, 60, 8) -- 
-        print("🅾️ to play again", self.game_manager_ref.camera_manager_ref.camera.cam_x+10, 70, 8) -- 
+        print("🅾️ to play again", self.game_manager_ref.camera_manager_ref.camera.cam_x+10, 70, 8) -- en
+
     end
 end
 

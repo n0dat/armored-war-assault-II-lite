@@ -35,6 +35,12 @@ function player_manager:add_player_cmr(cam_mgr_ref)
     end
 end
 
+function player_manager:reset_player_health()
+    for i = 1, #self.players do
+        self.players[i].health = 100
+    end
+end
+
 function player_manager:update()
 
     self.round = self.game_manager_ref.round_manager_ref.cur_round
@@ -46,8 +52,8 @@ function player_manager:update()
             if (not self.game_manager_ref.round_manager_ref:is_round_over()) then
                 self.game_manager_ref.projectile_manager_ref:remove_all_projectiles()
                 self.game_manager_ref.destruction_manager_ref:clear_craters()
-                self.game_manager_ref.camera_manager_ref:reset()
 
+                self.game_manager_ref.camera_manager_ref:reset()
                 self.game_manager_ref.round_manager_ref.cur_round += 1
                 self.game_manager_ref.level_manager_ref.cur_level += 1
 
@@ -59,8 +65,12 @@ function player_manager:update()
                     self.game_manager_ref.round_manager_ref:round_winner(1)
                 end
 
+                --self.game_manager_ref:set_players()
+
                 self.game_manager_ref.players_set = false
-                self.players[i].health = 100
+
+                self:reset_player_health()
+                
                 return
             end
         end

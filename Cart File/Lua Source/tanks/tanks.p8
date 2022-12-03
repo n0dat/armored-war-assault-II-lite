@@ -90,20 +90,20 @@ function _draw()
 	if (game_manager_obj:get_state() == 1) then
 		cls(1)
 		game_manager_obj.intro_ref:draw()
-		print("state: "..game_manager_obj.game_state, game_manager_obj.camera_manager_ref.init_pos.x, 24, 8)
-			print("level: "..game_manager_obj.level_manager_ref.cur_level, game_manager_obj.camera_manager_ref.camera.cam_x, 0, 8)
-			print("cam_x: "..game_manager_obj.camera_manager_ref.camera.cam_x, game_manager_obj.camera_manager_ref.camera.cam_x, 8, 8)
-			print("cam_y: "..game_manager_obj.camera_manager_ref.camera.cam_y, game_manager_obj.camera_manager_ref.camera.cam_x, 16, 8)
+		print("state: "..game_manager_obj.game_state, game_manager_obj.camera_manager_ref.camera.cam_x, 24, 8)
+		print("level: "..game_manager_obj.level_manager_ref.cur_level, game_manager_obj.camera_manager_ref.camera.cam_x, 0, 8)
+		print("cam_x: "..game_manager_obj.camera_manager_ref.camera.cam_x, game_manager_obj.camera_manager_ref.camera.cam_x, 8, 8)
+		print("cam_y: "..game_manager_obj.camera_manager_ref.camera.cam_y, game_manager_obj.camera_manager_ref.camera.cam_x, 16, 8)
 	end
 	-- this is the main menu state
 	if (game_manager_obj:get_state() == 2) then
 		cls(1)
 		pal()
 		game_manager_obj.menu_manager_ref:draw()
-		print("state: "..game_manager_obj.game_state, game_manager_obj.camera_manager_ref.init_pos.x, 24, 8)
-			print("level: "..game_manager_obj.level_manager_ref.cur_level, game_manager_obj.camera_manager_ref.camera.cam_x, 0, 8)
-			print("cam_x: "..game_manager_obj.camera_manager_ref.camera.cam_x, game_manager_obj.camera_manager_ref.camera.cam_x, 8, 8)
-			print("cam_y: "..game_manager_obj.camera_manager_ref.camera.cam_y, game_manager_obj.camera_manager_ref.camera.cam_x, 16, 8)
+		print("state: "..game_manager_obj.game_state, game_manager_obj.camera_manager_ref.camera.cam_x, 24, 8)
+		print("level: "..game_manager_obj.level_manager_ref.cur_level, game_manager_obj.camera_manager_ref.camera.cam_x, 0, 8)
+		print("cam_x: "..game_manager_obj.camera_manager_ref.camera.cam_x, game_manager_obj.camera_manager_ref.camera.cam_x, 8, 8)
+		print("cam_y: "..game_manager_obj.camera_manager_ref.camera.cam_y, game_manager_obj.camera_manager_ref.camera.cam_x, 16, 8)
 	end
 	-- this is the main game state
 	if (game_manager_obj:get_state() == 3) then
