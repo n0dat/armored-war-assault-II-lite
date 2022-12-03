@@ -23,6 +23,8 @@ end
 function intro:update(game_manager)
 	if (self.next_scene > 165) then
 		game_manager:set_state(2)
+		palt(0, false)
+		palt(2, true)
 	else
 		self.next_scene += 1
 	end
@@ -63,8 +65,7 @@ function intro:draw()
 		pal(9, 9, 0)
 		pal(7, 7, 0)
 		self.intro_over = true
-		palt(2, true)
-		pal(0, 1, 1)
+		pal(0, 0, 1)
 	end
 	self.intro_frame_count += 0.5
 end

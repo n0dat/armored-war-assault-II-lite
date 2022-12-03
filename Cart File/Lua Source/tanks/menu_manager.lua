@@ -13,47 +13,75 @@ function menu_manager:new(init_game_manager_ref)
 	return new_obj
 end
 
+function menu_manager:reset()
+    self.menu_manager = false
+    self.current_menu = 1
+end
+
 function menu_manager:update(g_manager)
     if (btn(❎, 1)) then
         if (self.current_menu == 1) then
-            palt(0, true)
-            pal(1, 1, 0)
-            pal(5, 5, 0)
-            pal(3, 3, 0)
-            pal(11, 11, 0)
-            pal(10, 10, 0)
-            pal(9, 9, 0)
-            pal(7, 7, 0)
+            pal(1, 1, 1)
+            pal(5, 5, 1)
+            pal(3, 3, 1)
+            pal(11, 11, 1)
+            pal(10, 10, 1)
+            pal(9, 9, 1)
+            pal(7, 7, 1)
             self.intro_over = true
-            palt(2, true)
             pal(0, 1, 1)
             pal(0, 0, 1)
+            pal()
+            palt(2, true)
             g_manager:set_state(3)
         elseif (self.current_menu == 2) then
-            palt(0, true)
-            pal(1, 1, 0)
-            pal(5, 5, 0)
-            pal(3, 3, 0)
-            pal(11, 11, 0)
-            pal(10, 10, 0)
-            pal(9, 9, 0)
-            pal(7, 7, 0)
-            palt(2, true)
+            pal(1, 1, 1)
+            pal(5, 5, 1)
+            pal(3, 3, 1)
+            pal(11, 11, 1)
+            pal(10, 10, 1)
+            pal(9, 9, 1)
+            pal(7, 7, 1)
             pal(0, 1, 1)
             pal(1, 1, 1)
-            palt(5, true)
+            pal()
+            palt(2, true)
             g_manager:set_state(3)
         end
     end
 
     if (btn(❎, 0) and self.current_menu == 3) then
+        g_manager:reset_all()
+        pal(1, 1, 1)
+        pal(5, 5, 1)
+        pal(3, 3, 1)
+        pal(11, 11, 1)
+        pal(10, 10, 1)
+        pal(9, 9, 1)
+        pal(7, 7, 1)
+        pal(0, 0, 1)
+        pal(1, 1, 1)
+        pal()
+        palt(2, true)
         g_manager:set_state(2)
         self.current_menu = 1
     end
 
     if (btn(🅾️, 0) and self.current_menu == 3) then
+        g_manager:reset_all()
+        pal(1, 1, 1)
+        pal(5, 5, 1)
+        pal(3, 3, 1)
+        pal(11, 11, 1)
+        pal(10, 10, 1)
+        pal(9, 9, 1)
+        pal(7, 7, 1)
+        pal(0, 0, 1)
+        pal(1, 1, 1)
+        pal()
+        palt(2, true)
         g_manager:set_state(3)
-        self.current_menu = 2
+        self.current_menu = 3
     end
 
 end
@@ -61,35 +89,36 @@ end
 function menu_manager:draw()
     if (self.current_menu == 1) then
         --
-        palt(0, true)
+        --palt(0, true)
         --pal(1, 0, 1)
-        rectfill(20, 35, 105, 79, 0)
-        rect(20, 35, 105, 79, 7)
-        rect(32, 62, 92, 62, 7)
+        rectfill(self.game_manager_ref.camera_manager_ref.camera.cam_x + 20, 35, self.game_manager_ref.camera_manager_ref.camera.cam_x + 105, 79, 0)
+        rect(self.game_manager_ref.camera_manager_ref.camera.cam_x + 20, 35, self.game_manager_ref.camera_manager_ref.camera.cam_x + 105, 79, 7)
+        rect(self.game_manager_ref.camera_manager_ref.camera.cam_x + 32, 62, self.game_manager_ref.camera_manager_ref.camera.cam_x + 92, 62, 7)
 
-        print("armored war assault", 25, 40, 7)
-        print("ii lite", 50, 50, 7)
-        print("press q to start", 30, 70, 7)
+        print("armored war assault", self.game_manager_ref.camera_manager_ref.camera.cam_x + 25, 40, 7)
+        print("ii lite", self.game_manager_ref.camera_manager_ref.camera.cam_x + 50, 50, 7)
+        print("press q to start", self.game_manager_ref.camera_manager_ref.camera.cam_x + 30, 70, 7)
     elseif (self.current_menu == 2) then
         --
-        palt(0, true)
-        palt(5, false)
+        --palt(0, true)
+        --palt(5, false)
         --pal(1, 0, 1)
-        rectfill(20, 35, 105, 79, 0)
-        rect(self.game_manager_ref.camera_manager_ref.camera.cam_x,35,105,79,7) -- 20
-        rect(self.game_manager_ref.camera_manager_ref.camera.cam_x,62,92,62,7) -- 32
+        rectfill(self.game_manager_ref.camera_manager_ref.camera.cam_x + 20, 35, self.game_manager_ref.camera_manager_ref.camera.cam_x + 105, 79, 0)
+        rect(self.game_manager_ref.camera_manager_ref.camera.cam_x,35,self.game_manager_ref.camera_manager_ref.camera.cam_x+105,79,7) -- 20
+        rect(self.game_manager_ref.camera_manager_ref.camera.cam_x,62,self.game_manager_ref.camera_manager_ref.camera.cam_x+92,62,7) -- 32
 
         print("armored war assault poggers", 25, 40, 8)
         print("ii lite", 50, 50, 7)
         print("this is a pause menu", 30, 70, 7)
     elseif (self.current_menu == 3) then
         --
-        rectfill(self.game_manager_ref.camera_manager_ref.camera.cam_x, 35, 105, 79, 7) -- top left x = 20
+        rectfill(self.game_manager_ref.camera_manager_ref.camera.cam_x + 5, 35, self.game_manager_ref.camera_manager_ref.camera.cam_x+105, 79, 7) -- top left x = 20
 
-        print("player "..self.game_manager_ref.game_winner, self.game_manager_ref.camera_manager_ref.camera.cam_x+5, 40, 8) -- x = 25
-        print("wins!", self.game_manager_ref.camera_manager_ref.camera.cam_x + 5,50,8) -- 
-        print("❎ to leave or", self.game_manager_ref.camera_manager_ref.camera.cam_x + 5, 60, 8) -- 
-        print("🅾️ to play again", self.game_manager_ref.camera_manager_ref.camera.cam_x + 5, 70, 8) -- 
+        print("player "..self.game_manager_ref.game_winner, self.game_manager_ref.camera_manager_ref.camera.cam_x+10, 40, 8) -- x = 25
+
+        print("wins!", self.game_manager_ref.camera_manager_ref.camera.cam_x+10,50,8) -- 
+        print("❎ to leave or", self.game_manager_ref.camera_manager_ref.camera.cam_x+10, 60, 8) -- 
+        print("🅾️ to play again", self.game_manager_ref.camera_manager_ref.camera.cam_x+10, 70, 8) -- 
     end
 end
 

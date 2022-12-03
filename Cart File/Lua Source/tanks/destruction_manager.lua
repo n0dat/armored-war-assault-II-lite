@@ -18,6 +18,10 @@ function destruction_manager:clear_craters()
     self.craters = {}
 end
 
+function destruction_manager:reset()
+    self:clear_craters()
+end
+
 function destruction_manager:draw()
     for i = 1, #self.craters do
         circfill(self.craters[i].x, self.craters[i].y, self.craters[i].radius, sky_color)

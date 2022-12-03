@@ -47,8 +47,9 @@ function _init()
 
 	game_manager_obj.level_manager_ref:init_levels()
 	game_manager_obj.level_manager_ref.cur_level = 1
+	game_manager_obj:set_players()
 
-	game_manager_obj.round_manager_ref:set_total_rounds(1)
+	game_manager_obj.round_manager_ref:set_total_rounds(2)
 	game_manager_obj.round_manager_ref.wins_needed = flr(game_manager_obj.round_manager_ref.total_rounds / 2)
 
 	game_manager_obj.camera_manager_ref:set_init_pos(game_manager_obj.camera_manager_ref.camera.cam_x, game_manager_obj.camera_manager_ref.camera.cam_y)
@@ -74,7 +75,7 @@ function _update60()
 		game_manager_obj.camera_manager_ref:update()
 
 		if (game_manager_obj.game_winner != 0) then
-			game_manager_obj:set_state(4)
+			game_manager_obj:set_state(2)
 		end
 	end
 	-- this is the end game state
@@ -90,15 +91,9 @@ function _draw()
 		cls(1)
 		game_manager_obj.intro_ref:draw()
 		print("state: "..game_manager_obj.game_state, game_manager_obj.camera_manager_ref.init_pos.x, 24, 8)
-		if (game_manager_obj.game_winner != 0) then
 			print("level: "..game_manager_obj.level_manager_ref.cur_level, game_manager_obj.camera_manager_ref.camera.cam_x, 0, 8)
 			print("cam_x: "..game_manager_obj.camera_manager_ref.camera.cam_x, game_manager_obj.camera_manager_ref.camera.cam_x, 8, 8)
 			print("cam_y: "..game_manager_obj.camera_manager_ref.camera.cam_y, game_manager_obj.camera_manager_ref.camera.cam_x, 16, 8)
-		else
-			print("level: "..game_manager_obj.level_manager_ref.cur_level, game_manager_obj.camera_manager_ref.init_pos.x, 0, 8)
-			print("cam_x: "..game_manager_obj.camera_manager_ref.init_pos.x, game_manager_obj.camera_manager_ref.init_pos.x, 8, 8)
-			print("cam_y: "..game_manager_obj.camera_manager_ref.init_pos.y, game_manager_obj.camera_manager_ref.init_pos.x, 16, 8)	
-		end
 	end
 	-- this is the main menu state
 	if (game_manager_obj:get_state() == 2) then
@@ -106,15 +101,9 @@ function _draw()
 		pal()
 		game_manager_obj.menu_manager_ref:draw()
 		print("state: "..game_manager_obj.game_state, game_manager_obj.camera_manager_ref.init_pos.x, 24, 8)
-		if (game_manager_obj.game_winner != 0) then
 			print("level: "..game_manager_obj.level_manager_ref.cur_level, game_manager_obj.camera_manager_ref.camera.cam_x, 0, 8)
 			print("cam_x: "..game_manager_obj.camera_manager_ref.camera.cam_x, game_manager_obj.camera_manager_ref.camera.cam_x, 8, 8)
 			print("cam_y: "..game_manager_obj.camera_manager_ref.camera.cam_y, game_manager_obj.camera_manager_ref.camera.cam_x, 16, 8)
-		else
-			print("level: "..game_manager_obj.level_manager_ref.cur_level, game_manager_obj.camera_manager_ref.init_pos.x, 0, 8)
-			print("cam_x: "..game_manager_obj.camera_manager_ref.init_pos.x, game_manager_obj.camera_manager_ref.init_pos.x, 8, 8)
-			print("cam_y: "..game_manager_obj.camera_manager_ref.init_pos.y, game_manager_obj.camera_manager_ref.init_pos.x, 16, 8)	
-		end
 	end
 	-- this is the main game state
 	if (game_manager_obj:get_state() == 3) then

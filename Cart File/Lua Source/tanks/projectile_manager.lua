@@ -14,6 +14,12 @@ function projectile_manager:new(init_game_manager_ref, arm_time)
     return new_obj
 end
 
+function projectile_manager:reset()
+    self:remove_all_projectiles()
+    self.arming_time = 0.15
+    self.split_delay = 0.5
+end
+
 function projectile_manager:spawn_projectile(x, y, vel_x, vel_y, p_type, p_dir) --spawn new projectile using a vector
     local new_projectile = projectile:new(x, y, vel_x, vel_y, 9, p_type, p_dir)
     add(self.projectiles, new_projectile)

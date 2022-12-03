@@ -17,6 +17,10 @@ function level_manager:add_level(new_level)
     end
 end
 
+function level_manager:reset()
+    self.cur_level = 1
+end
+
 function level_manager:init_levels()
 
     -- 1 - 4 are desert levels

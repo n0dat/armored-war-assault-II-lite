@@ -30,6 +30,9 @@ function camera_manager:reset()
     self.camera.cam_x = 0
     self.camera.cam_y = 0
     self.paused = false
+    self.init_pos = {x = 0, y = 0}
+    self.pause_delay = 1
+    self.pause_time = 0
     self:update()
 end
 

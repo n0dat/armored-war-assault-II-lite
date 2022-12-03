@@ -31,6 +31,36 @@ function game_manager:set_state(state)
 	end
 end
 
+function game_manager:reset_all()
+
+	-- game manager reset
+	self.game_phase = 1
+	self.game_state = 1
+	self.game_winner = 0
+	self.cam_y = 0
+	self.min_x = 0
+	self.max_x = 255
+	self.players_set = false
+	self.last_player_turn = -1
+
+	-- reset references
+	self.player_manager_ref:reset()
+	self.menu_manager_ref:reset()
+	self.projectile_manager_ref:reset()
+	self.round_manager_ref:reset() -- need to re-call set_total_rounds(rounds)
+	self.destruction_manager_ref:reset()
+	self.camera_manager_ref:reset()
+	self.intro_ref:reset()
+	self.level_manager_ref:reset()
+
+	-- resetting the color palette
+	pal()
+	palt(2, true)
+	palt(0, false)
+	pal(0, 0, 1)
+
+end
+
 function game_manager:set_players()
 	if (self.players_set == false) then
 		if (self.level_manager_ref != nil) then
@@ -68,6 +98,9 @@ function game_manager:set_players()
 			self.player_manager_ref.players[1] = player1_ref
 			self.player_manager_ref.players[2] = player2_ref
 		end
+
+		self.camera_manager_ref:update()
+
 	end
 end
 
@@ -92,7 +125,7 @@ function game_manager:update()
 	if (self.round_manager_ref.cur_round > self.round_manager_ref.total_rounds) then
 		self.round_manager_ref.cur_round = 1
 		self.level_manager_ref.cur_level = 1
-		--self:set_state(4)
+		self:set_state(2)
 		self.menu_manager_ref.current_menu = 3
 		self.menu_manager_ref.menu_open = false
 		self.camera_manager_ref:reset()
@@ -107,7 +140,7 @@ function game_manager:update()
 
 	if (self.menu_manager_ref.menu_open) then
 		self.menu_manager_ref:draw()
-		if (btnp(❎, 1)) then
+		if (btnp(🅾️, 1)) then
 			self.menu_manager_ref.menu_open = false
 		end
 	else
@@ -118,7 +151,7 @@ function game_manager:update()
 				self.player_turn = 1
 			end
 		end
-		if (btnp(❎, 1)) then
+		if (btnp(🅾️, 1)) then
 			self.menu_manager_ref.current_menu = 3
 			self.menu_manager_ref.menu_open = true
 		end

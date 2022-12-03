@@ -44,6 +44,22 @@ function player:new(sprite, init_speed, sprite_col, init_game_manager_ref, p_num
 	return new_obj
 end
 
+function player:reset()
+	self.bottom_left = {x = 0, y = 0}
+	self.bottom_right = {x = 0, y = 0}
+	self.angle = 0
+	self.barrelx = 0
+	self.barrely = 0
+	self.barrel_rise = 0
+	self.facing_left = false
+	self.engine_power = 2
+	self.speed = 0.5
+	self.shot_power = 1
+	self.shot_type = 1
+	self.can_move = true
+	self.health = 100
+end
+
 function player:controls()
 	if (self.can_move) then
 		self:shoot()

@@ -10,10 +10,17 @@ function player_manager:new(init_game_manager_ref)
     local new_obj = {
         players = {},
         game_manager_ref = init_game_manager_ref,
-        round,
+        round = 1,
     }
     setmetatable(new_obj, player_manager) 
     return new_obj
+end
+
+function player_manager:reset()
+    for i = 1, #self.players do
+        self.players[i]:reset()
+    end
+    self.round = 1
 end
 
 function player_manager:add_player(new_player)

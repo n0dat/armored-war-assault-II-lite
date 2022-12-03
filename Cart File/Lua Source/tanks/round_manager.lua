@@ -14,6 +14,15 @@ function round_manager:new(init_game_manager_ref)
     return new_obj
 end
 
+function round_manager:reset()
+    self.rounds = {}
+    self.total_wins = {p1 = 0, p2 = 0}
+    self.cur_round = 1
+
+    -- this is for testing    
+    self:set_total_rounds(self.total_rounds)
+end
+
 function round_manager:set_total_rounds(total_rounds)
     if (total_rounds != nil) then
 
