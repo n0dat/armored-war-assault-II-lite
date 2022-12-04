@@ -19,8 +19,8 @@ __lua__
 -- 1 = camera coordinates, level, state, game winner
 -- 2 = player 1 money and points, player 2 money and points
 -- 3 = player 1 health and armor, player 2 health and armor
--- 4 = mouse position
-debug = 1
+-- 4 = mouse position, player 1 fuel, player 2 fuel
+debug = 0
 
 function _init()
 	
@@ -76,7 +76,7 @@ function _update60()
 	-- this is the main game state
 	if (game_manager_obj:get_state() == 3) then
 		game_manager_obj:update()
-		game_manager_obj.player_manager_ref:update()	
+		game_manager_obj.player_manager_ref:update()
 		game_manager_obj.projectile_manager_ref:update()
 		game_manager_obj.camera_manager_ref:update()
 
@@ -97,6 +97,7 @@ function _draw()
 	if (game_manager_obj:get_state() == 1) then
 		cls(1)
 		game_manager_obj.intro_ref:draw()
+		--[[
 		if (debug == 1) then
 			print("state: "..game_manager_obj.game_state, game_manager_obj.camera_manager_ref.camera.cam_x, 24, 8)
 			print("level: "..game_manager_obj.level_manager_ref.cur_level, game_manager_obj.camera_manager_ref.camera.cam_x, 0, 8)
@@ -118,14 +119,18 @@ function _draw()
 		if (debug == 4) then
 			print("mouse x: "..(game_manager_obj.camera_manager_ref.camera.cam_x + stat(32) - 1), game_manager_obj.camera_manager_ref.camera.cam_x, 0, 8)
 			print("mouse y: "..(stat(33) - 1), game_manager_obj.camera_manager_ref.camera.cam_x, 8, 8)
+			print("p1 fuel: "..game_manager_obj.player_manager_ref.players[1].fuel, game_manager_obj.camera_manager_ref.camera.cam_x, 16, 8)
+			print("p2 fuel: "..game_manager_obj.player_manager_ref.players[2].fuel, game_manager_obj.camera_manager_ref.camera.cam_x, 24, 8)
 			--spr(0, (game_manager_obj.camera_manager_ref.camera.cam_x + stat(32) - 1), (stat(33) - 1))
 		end
+		--]]
 	end
 	-- this is the main menu state
 	if (game_manager_obj:get_state() == 2) then
 		cls(1)
 		pal()
 		game_manager_obj.menu_manager_ref:draw()
+		--[[
 		if (debug == 1) then
 			print("state: "..game_manager_obj.game_state, game_manager_obj.camera_manager_ref.camera.cam_x, 24, 8)
 			print("level: "..game_manager_obj.level_manager_ref.cur_level, game_manager_obj.camera_manager_ref.camera.cam_x, 0, 8)
@@ -144,9 +149,12 @@ function _draw()
 			print("p2 health: "..game_manager_obj.player_manager_ref.players[2].health, game_manager_obj.camera_manager_ref.camera.cam_x, 16, 8)
 			print("p2 armor: "..game_manager_obj.player_manager_ref.players[2].armor, game_manager_obj.camera_manager_ref.camera.cam_x, 24, 8)
 		end
+		--]]
 		if (debug == 4) then
 			print("mouse x: "..(game_manager_obj.camera_manager_ref.camera.cam_x + stat(32) - 1), game_manager_obj.camera_manager_ref.camera.cam_x, 0, 8)
 			print("mouse y: "..(stat(33) - 1), game_manager_obj.camera_manager_ref.camera.cam_x, 8, 8)
+			print("p1 fuel: "..game_manager_obj.player_manager_ref.players[1].fuel, game_manager_obj.camera_manager_ref.camera.cam_x, 16, 8)
+			print("p2 fuel: "..game_manager_obj.player_manager_ref.players[2].fuel, game_manager_obj.camera_manager_ref.camera.cam_x, 24, 8)
 			--spr(0, (game_manager_obj.camera_manager_ref.camera.cam_x + stat(32) - 1), (stat(33) - 1))
 		end
 	end
@@ -157,6 +165,13 @@ function _draw()
 		game_manager_obj.destruction_manager_ref:draw()
 		game_manager_obj.player_manager_ref:draw()
 		game_manager_obj.projectile_manager_ref:draw()
+		print("p1 fuel:"..game_manager_obj.player_manager_ref.players[1].fuel, game_manager_obj.camera_manager_ref.camera.cam_x + 1, 1, 0)
+		print("p2 fuel:"..game_manager_obj.player_manager_ref.players[2].fuel, game_manager_obj.camera_manager_ref.camera.cam_x + 76, 1, 0)
+		spr(53, game_manager_obj.camera_manager_ref.camera.cam_x + 1, 9)
+		spr(53, game_manager_obj.camera_manager_ref.camera.cam_x + 109, 9)
+		print(game_manager_obj.player_manager_ref.players[1].health_packs, game_manager_obj.camera_manager_ref.camera.cam_x + 12, 10, 0)
+		print(game_manager_obj.player_manager_ref.players[2].health_packs, game_manager_obj.camera_manager_ref.camera.cam_x + 120, 10, 0)
+		--[[
 		if (debug == 1) then
 			print("level: "..game_manager_obj.level_manager_ref.cur_level, game_manager_obj.camera_manager_ref.camera.cam_x, 0, 8)
 			print("cam_x: "..game_manager_obj.camera_manager_ref.camera.cam_x, game_manager_obj.camera_manager_ref.camera.cam_x, 8, 8)
@@ -179,13 +194,17 @@ function _draw()
 		if (debug == 4) then
 			print("mouse x: "..(game_manager_obj.camera_manager_ref.camera.cam_x + stat(32) - 1), game_manager_obj.camera_manager_ref.camera.cam_x, 0, 8)
 			print("mouse y: "..(stat(33) - 1), game_manager_obj.camera_manager_ref.camera.cam_x, 8, 8)
+			print("p1 fuel: "..game_manager_obj.player_manager_ref.players[1].fuel, game_manager_obj.camera_manager_ref.camera.cam_x, 16, 8)
+			print("p2 fuel: "..game_manager_obj.player_manager_ref.players[2].fuel, game_manager_obj.camera_manager_ref.camera.cam_x, 24, 8)
 			--spr(0, (game_manager_obj.camera_manager_ref.camera.cam_x + stat(32) - 1), (stat(33) - 1))
 		end
+		--]]
 	end
 	-- this is the end game state
 	if (game_manager_obj:get_state() == 4) then
 		cls(1)
 		game_manager_obj.menu_manager_ref:draw()
+		--[[
 		if (debug == 1) then
 			print("level: "..game_manager_obj.level_manager_ref.cur_level, game_manager_obj.camera_manager_ref.camera.cam_x, 0, 8)
 			print("cam_x: "..game_manager_obj.camera_manager_ref.camera.cam_x, game_manager_obj.camera_manager_ref.camera.cam_x, 8, 8)
@@ -206,8 +225,11 @@ function _draw()
 		if (debug == 4) then
 			print("mouse x: "..(game_manager_obj.camera_manager_ref.camera.cam_x + stat(32) - 1), game_manager_obj.camera_manager_ref.camera.cam_x, 0, 8)
 			print("mouse y: "..(stat(33) - 1), game_manager_obj.camera_manager_ref.camera.cam_x, 8, 8)
+			print("p1 fuel: "..game_manager_obj.player_manager_ref.players[1].fuel, game_manager_obj.camera_manager_ref.camera.cam_x, 16, 8)
+			print("p2 fuel: "..game_manager_obj.player_manager_ref.players[2].fuel, game_manager_obj.camera_manager_ref.camera.cam_x, 24, 8)
 			--spr(0, (game_manager_obj.camera_manager_ref.camera.cam_x + stat(32) - 1), (stat(33) - 1))
 		end
+		--]]
 	end
 end
 
@@ -236,14 +258,14 @@ __gfx__
 000000000000000000000000000000000000000000000000000000000000000000000000000000000005b533395b500000000000333cccccccccc33300000000
 0000000000000000000000000000000000000000000000000000000000000000000000000000000000005911331100000000000033cccccccccccc3300000000
 000000000000000000000000000000000000000000000000000000000000000000000000000000000000531733170000000000003cccccccccccccc300000000
-00000000000000000990000000555500000000a900666600006706700000000000000000000000000000531133115000000000003cccccccccccccc300000000
-00660000007700009999900005766650000005a066777766055675670000000000000000000000000005333333ab50000000000033cccccccccccc3300000000
-06666600077777009999990057666765088888806771177605556556000000000000000000000000005bb3333333b50000000000333cccccccccc33300000000
-0666666007777770999999005766676588e88e88671188760999a99900000000000000000000000005bba3b3ab3aa500000000003333cccccccc333300000000
-06666660077777709999900056667665888ee888671888765555555500000000000000000000000005baabbaaab9aa500000000033333cccccc3333300000000
-06666600077777000990000005666650888ee888677887765999a999000000000000000000000000005ab9ab9ab5550000000000333333cccc33333300000000
-0066000000770000000000000056650088e88e886677776655555555000000000000000000000000000555ba95500000000000003333333cc333333300000000
-0000000000000000000000000005500008888880006666000999a999000000000000000000000000000000555000000000000000333333333333333300000000
+00000000000000000990000000555500000000a900666600006706700000a00000000000000000000000531133115000000000003cccccccccccccc300000000
+00660000007700009999900005766650000005a0667777660556756700066a0000000000000000000005333333ab50000000000033cccccccccccc3300000000
+06666600077777009999990057666765088888806771177605556556006666000000000000000000005bb3333333b50000000000333cccccccccc33300000000
+0666666007777770999999005766676588e88e88671188760999a99900a666a0000000000000000005bba3b3ab3aa500000000003333cccccccc333300000000
+06666660077777709999900056667665888ee8886718887655555555066a566a000000000000000005baabbaaab9aa500000000033333cccccc3333300000000
+06666600077777000990000005666650888ee888677887765999a999666666660000000000000000005ab9ab9ab5550000000000333333cccc33333300000000
+0066000000770000000000000056650088e88e886677776655555555566656660000000000000000000555ba95500000000000003333333cc333333300000000
+0000000000000000000000000005500008888880006666000999a999055005500000000000000000000000555000000000000000333333333333333300000000
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000

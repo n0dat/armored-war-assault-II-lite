@@ -39,7 +39,7 @@ function level_manager:init_levels()
 
     self.levels[1] = {p1 = {x = 2, y = 62.5}, p2 = {x = 246, y = 62.5}, tx=0, ty=0, w=32, h=16, min_x=0, max_x=255, max_y=0, min_y=127}
     self.levels[2] = {p1 = {x = 2, y = 62.5}, p2 = {x = 246, y = 92.5}, tx=33, ty=0, w=32, h=16, min_x=0, max_x=255, max_y=0, min_y=127}
-    self.levels[5] = {p1 = {x = 2, y = 32.5}, p2 = {x = 246, y = 32.5}, tx=66, ty=0, w=32, h=16, min_x=0, max_x=255, max_y=0, min_y=127}
+    self.levels[5] = {p1 = {x = 2, y = 36.5}, p2 = {x = 246, y = 36.5}, tx=66, ty=0, w=32, h=16, min_x=0, max_x=255, max_y=0, min_y=127}
 
     self.levels[3] = {p1 = {x = 2, y = 72.5}, p2 = {x = 246, y = 72.5}, tx=0, ty=17, w=32, h=16, min_x=0, max_x=255, max_y=0, min_y=127}
     self.levels[4] = {p1 = {x = 2, y = 92.5}, p2 = {x = 246, y = 22.5}, tx=33, ty=17, w=32, h=16, min_x=0, max_x=255, max_y=0, min_y=127}

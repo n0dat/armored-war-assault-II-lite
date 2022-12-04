@@ -9,6 +9,7 @@ player.__index = player
 --Player constructor
 function player:new(sprite, init_speed, sprite_col, init_game_manager_ref, p_num) --Sprite collection and starting sprite along with starting coordinites.
 	local new_obj = {
+		health_packs = 10,
 		x,
 		y,
 		bottom_left = {
@@ -38,7 +39,8 @@ function player:new(sprite, init_speed, sprite_col, init_game_manager_ref, p_num
 		player_no = p_num,
 		money = 0,
 		points = 0,
-		fuel = 50,
+		fuel = 350,
+		ammo = 10000,
 		cm_ref
 	}
 	-- shot type = 1 is standard single bomb
@@ -50,6 +52,7 @@ function player:new(sprite, init_speed, sprite_col, init_game_manager_ref, p_num
 end
 
 function player:reset()
+	self.health_packs = 0
 	self.bottom_left = {x = 0, y = 0}
 	self.bottom_right = {x = 0, y = 0}
 	self.angle = 0
@@ -67,7 +70,8 @@ function player:reset()
 	self.points = 0
 	self.has_armor = true
 	self.armor = 30
-	self.fuel = 50
+	self.fuel = 350
+	self.ammo = 10000
 end
 
 function player:update_money(cost)
@@ -96,7 +100,7 @@ end
 -- this is always creating a cluster shot
 -- set the last value in the spawn_projectile() call to 1 to have standard shots
 function player:shoot()
-	if (btnp(5)) then
+	if (btnp(5) and self.ammo > 0) then
 		if (self.x > self.cm_ref.camera.cam_x and self.x < self.cm_ref.camera.cam_x + 127) then
 			if (self.player_no == 1) then
 				self.game_manager_ref.p1_shot = 1
@@ -106,13 +110,22 @@ function player:shoot()
 
 			if (not self.facing_left) then
 				sfx(1)
-				self.game_manager_ref.projectile_manager_ref:spawn_projectile(self.barrelx, self.barrely - self.barrel_rise, self.shot_power*cos(self.angle*(1/360)), self.shot_power*sin(self.angle*(1/360)), 2, 1)
+				self.game_manager_ref.projectile_manager_ref:spawn_projectile(self.barrelx, self.barrely - self.barrel_rise, self.shot_power*cos(self.angle*(1/360)), self.shot_power*sin(self.angle*(1/360)), self.shot_type, 1)
 			else
 				sfx(1)
-				self.game_manager_ref.projectile_manager_ref:spawn_projectile(self.barrelx, self.barrely - self.barrel_rise, -1*self.shot_power*cos(self.angle*(1/360)), self.shot_power*sin(self.angle*(1/360)), 2, 0)
+				self.game_manager_ref.projectile_manager_ref:spawn_projectile(self.barrelx, self.barrely - self.barrel_rise, -1*self.shot_power*cos(self.angle*(1/360)), self.shot_power*sin(self.angle*(1/360)), self.shot_type, 0)
 			end
+			--self.ammo -= 1
 		end
+	elseif (btnp(5) and self.ammo == 0) then
+		if (self.player_no == 1) then
+				self.game_manager_ref.p1_shot = 1
+			elseif (self.player_no == 2) then
+				self.game_manager_ref.p2_shot = 1
+			end
+		sfx(4)
 	end
+	
 end
 
 function player:move_player()
@@ -171,29 +184,36 @@ end
 
 function player:move_player_cords(dx, dy)
 
-	if ((self.x + dx) > 0 and (self.x + dx) < 247.5) then-- and (self.x + dx) < 247) then
-		self.x += dx
+	if (self.fuel > 0) then
+		if ((self.x + dx) > 0 and (self.x + dx) < 247.5) then-- and (self.x + dx) < 247) then
+			self.x += dx
+			if (dx > 0) then
+				self.fuel -= dx
+			else
+				self.fuel += dx
+			end
+		end
+
+		self.y += dy
+
+		if ((self.bottom_left.x + dx) > 0 and (self.bottom_left.x + dx) < 247.5) then --  and (self.bottom_left.x + dx) < 247) then
+			self.bottom_left.x += dx
+		end
+
+		self.bottom_left.y += dy
+
+		if ((self.bottom_right.x + dx) > 0 and (self.bottom_right.x + dx) < 254.5) then-- and (self.bottom_right.x + dx) < 247) then
+			self.bottom_right.x += dx
+		end
+		
+		self.bottom_right.y += dy
+		
+		if ((self.barrelx + dx) > 0 and (self.barrelx + dx) < 247.5) then
+			self.barrelx += dx
+		end
+		self.barrely += dy
 	end
 
-	self.y += dy
-
-	if ((self.bottom_left.x + dx) > 0 and (self.bottom_left.x + dx) < 247.5) then --  and (self.bottom_left.x + dx) < 247) then
-		self.bottom_left.x += dx
-	end
-
-	self.bottom_left.y += dy
-
-	if ((self.bottom_right.x + dx) > 0 and (self.bottom_right.x + dx) < 254.5) then-- and (self.bottom_right.x + dx) < 247) then
-		self.bottom_right.x += dx
-	end
-	
-	self.bottom_right.y += dy
-
-	if ((self.barrelx + dx) > 0 and (self.barrelx + dx) < 254.5) then
-		self.barrelx += dx
-	end
-
-	self.barrely += dy
 end
 
 function player:set_barrel_rise()

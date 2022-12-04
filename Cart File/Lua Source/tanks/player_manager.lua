@@ -117,7 +117,7 @@ function player_manager:do_gravity()
                 can_fall = is_not_solid(bl_x, bl_y+1, sky_color)
             elseif (i == 7) then
                 can_fall = is_not_solid(br_x, br_y+1, sky_color)
-            else
+            else    
                 can_fall = is_not_solid(bl_x + i, bl_y+1, sky_color)
             end
             if (not can_fall) then

@@ -10,9 +10,9 @@ function menu_manager:new(init_game_manager_ref)
 		current_menu = 1,
 		game_manager_ref = init_game_manager_ref,
 		menu_open = false,
-		shop_sprites = {armor = 51, fuel = 52, health = 53, ammo = 54},
-		item_costs = {armor = 100, fuel = 20, health = 40, ammo = 15},
-		item_benefits = {armor = 30, fuel = 20, health = 60, ammo = 7},
+		shop_sprites = {armor = 51, fuel = 52, health = 53, ammo = 54, cluster = 55},
+		item_costs = {armor = 80, fuel = 30, health = 50, ammo = 20, cluster = 110},
+		item_benefits = {armor = 30, fuel = 200, health = 60, ammo = 7, cluster = {stype = 2, damage = 12}},
 		start_game_selection = {forest = "forest", desert = "desert"},
 		setting = 1, -- 1 = forest   2 = desert
 		rounds = 1,
@@ -22,16 +22,16 @@ function menu_manager:new(init_game_manager_ref)
 		current_shop_player = 1,
 		mouse_sprites = {clicked = 0, unclicked = 16},
 		mouse_pos = {x = 0, y = 0},
-		player1_purchased = {armor = false, fuel = false, health = false, ammo = false},
-		player2_purchased = {armor = false, fuel = false, health = false, ammo = false}
+		player1_purchased = {armor = false, fuel = false, health = false, ammo = false, cluster = false},
+		player2_purchased = {armor = false, fuel = false, health = false, ammo = false, cluster = false}
 	}
 	setmetatable(new_obj, menu_manager)
 	return new_obj
 end
 
 function menu_manager:shop_reset()
-	player1_purchased = {armor = false, fuel = false, health = false, ammo = false}
-	player2_purchased = {armor = false, fuel = false, health = false, ammo = false}
+	player1_purchased = {armor = false, fuel = false, health = false, ammo = false, cluster = false}
+	player2_purchased = {armor = false, fuel = false, health = false, ammo = false, cluster = false}
 end
 
 function menu_manager:reset(typec)
@@ -185,6 +185,7 @@ function menu_manager:update()
 			pal()
 			palt(2, true)
 			palt(0, false)
+			self.game_manager_ref:set_players()
 		end
 		self.current_menu = 3
 	elseif (self.current_menu == 4) then
@@ -242,7 +243,7 @@ function menu_manager:update()
 					if (self.player1_purchased.fuel == false and self.game_manager_ref.player_manager_ref.players[1].money >= self.item_costs.fuel) then
 						self.game_manager_ref.player_manager_ref.players[1]:update_money(-self.item_costs.fuel)
 						self.game_manager_ref.player_manager_ref.players[1].fuel += self.item_benefits.fuel
-						self.player2_purchased.fuel = true
+						self.player1_purchased.fuel = true
 						sfx(2)
 					else
 						sfx(4)
@@ -262,7 +263,7 @@ function menu_manager:update()
 					if (self.player1_purchased.health == false and self.game_manager_ref.player_manager_ref.players[1].money >= self.item_costs.health) then
 						self.game_manager_ref.player_manager_ref.players[1]:update_money(-self.item_costs.health)
 						self.game_manager_ref.player_manager_ref.players[1].health += self.item_benefits.health
-						self.player2_purchased.health = true
+						self.player1_purchased.health = true
 						sfx(2)
 					else
 						sfx(4)
@@ -277,6 +278,7 @@ function menu_manager:update()
 						sfx(4)
 					end
 				end
+			--[[
 			elseif (self.shop_selection == 4) then
 				if (self.current_shop_player == 1) then
 					if (self.player1_purchased.ammo == false and self.game_manager_ref.player_manager_ref.players[1].money >= self.item_costs.ammo) then
@@ -297,6 +299,31 @@ function menu_manager:update()
 						sfx(4)
 					end
 				end
+			--]]
+			--elseif (self.shop_selection == 5) then
+			elseif (self.shop_selection == 4) then
+				if (self.current_shop_player == 1) then
+					if (self.player1_purchased.cluster == false and self.game_manager_ref.player_manager_ref.players[1].money >= self.item_costs.cluster) then
+						self.game_manager_ref.player_manager_ref.players[1]:update_money(-self.item_costs.cluster)
+						self.game_manager_ref.player_manager_ref.players[1].shot_type = self.item_benefits.cluster.stype
+						self.game_manager_ref.player_manager_ref.players[1].damage = self.item_benefits.cluster.damage
+						self.player1_purchased.cluster = true
+						sfx(2)
+					else
+						sfx(4)
+					end
+				else
+					if (self.player2_purchased.cluster == false and self.game_manager_ref.player_manager_ref.players[2].money >= self.item_costs.cluster) then
+						self.game_manager_ref.player_manager_ref.players[2]:update_money(-self.item_costs.cluster)
+						self.game_manager_ref.player_manager_ref.players[2].shot_type = self.item_benefits.cluster_stype
+						self.game_manager_ref.player_manager_ref.players[2].damage = self.item_benefits.cluster.damage
+						self.player2_purchased.cluster = true
+						sfx(2)
+					else
+						sfx(4)
+					end
+				end
+			--elseif (self.shop_selection == 6) then
 			elseif (self.shop_selection == 5) then
 				sfx(3)
 				if (self.current_shop_player == 1) then
@@ -364,16 +391,16 @@ function menu_manager:draw()
 		--  ammo = 54
 
 		-- drawing UI box
-		rectfill(self.game_manager_ref.camera_manager_ref.camera.cam_x + 20, 30, self.game_manager_ref.camera_manager_ref.camera.cam_x + 105, 84, 0)
-		rect(self.game_manager_ref.camera_manager_ref.camera.cam_x + 20,30,self.game_manager_ref.camera_manager_ref.camera.cam_x+105,84,7) -- 20
-		rect(self.game_manager_ref.camera_manager_ref.camera.cam_x + 20,67,self.game_manager_ref.camera_manager_ref.camera.cam_x+105,67,7) -- 32
+		rectfill(self.game_manager_ref.camera_manager_ref.camera.cam_x + 15, 30, self.game_manager_ref.camera_manager_ref.camera.cam_x + 110, 84, 0)
+		rect(self.game_manager_ref.camera_manager_ref.camera.cam_x + 15,30,self.game_manager_ref.camera_manager_ref.camera.cam_x+110,84,7) -- 20
+		rect(self.game_manager_ref.camera_manager_ref.camera.cam_x + 15,67,self.game_manager_ref.camera_manager_ref.camera.cam_x+110,67,7) -- 32
 
 
 		-- drawing Item icons
 		spr(self.shop_sprites.armor, self.game_manager_ref.camera_manager_ref.camera.cam_x + 29, 45)
 		spr(self.shop_sprites.fuel, self.game_manager_ref.camera_manager_ref.camera.cam_x + 49, 45)
 		spr(self.shop_sprites.health, self.game_manager_ref.camera_manager_ref.camera.cam_x + 69, 45)
-		spr(self.shop_sprites.ammo, self.game_manager_ref.camera_manager_ref.camera.cam_x + 89, 45)
+		spr(self.shop_sprites.cluster, self.game_manager_ref.camera_manager_ref.camera.cam_x + 89, 45)
 
 		spr(49, self.game_manager_ref.camera_manager_ref.camera.cam_x + 93, 73)
 
@@ -388,7 +415,7 @@ function menu_manager:draw()
 			print("cost: "..self.item_costs.health, self.game_manager_ref.camera_manager_ref.camera.cam_x + 25, 74, 7)
 			rect(self.game_manager_ref.camera_manager_ref.camera.cam_x + 65, 42, self.game_manager_ref.camera_manager_ref.camera.cam_x + 80, 55, 7)
 		elseif (self.shop_selection == 4) then
-			print("cost: "..self.item_costs.ammo, self.game_manager_ref.camera_manager_ref.camera.cam_x + 25, 74, 7)
+			print("cost: "..self.item_costs.cluster, self.game_manager_ref.camera_manager_ref.camera.cam_x + 25, 74, 7)
 			rect(self.game_manager_ref.camera_manager_ref.camera.cam_x + 85, 42, self.game_manager_ref.camera_manager_ref.camera.cam_x + 100, 55, 7)
 		elseif (self.shop_selection == 5) then
 			spr(48, self.game_manager_ref.camera_manager_ref.camera.cam_x + 93, 73)
