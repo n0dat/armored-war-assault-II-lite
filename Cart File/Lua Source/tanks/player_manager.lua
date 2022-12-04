@@ -80,7 +80,14 @@ function player_manager:update()
                 self.game_manager_ref.players_set = false
 
                 self:reset_player_health()
-                
+
+
+
+                if (self.game_manager_ref.round_manager_ref.total_rounds > 1 and self.game_manager_ref.round_manager_ref.cur_round <= self.game_manager_ref.round_manager_ref.total_rounds) then
+                    self.game_manager_ref.menu_manager_ref.current_menu = 4
+                end
+
+                self.game_manager_ref:set_state(2)
                 --return
             end
         end

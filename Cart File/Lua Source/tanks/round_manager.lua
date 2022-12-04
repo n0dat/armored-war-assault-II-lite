@@ -5,6 +5,7 @@ function round_manager:new(init_game_manager_ref)
     local new_obj = {
         rounds = {},
         total_rounds = 1,
+		round_winners = {},
         wins_needed,
         total_wins = {p1 = 0, p2 = 0},
         cur_round = 1,
@@ -18,6 +19,7 @@ function round_manager:reset()
     self.rounds = {}
     self.total_wins = {p1 = 0, p2 = 0}
     self.cur_round = 1
+	self.round_winners = {}
 	self:set_total_rounds(self.total_rounds)
 end
 
@@ -48,6 +50,7 @@ end
 function round_manager:round_winner(winner)
     if (winner != nil) then
         if (winner == 1) then
+			self.game_manager_ref.menu_manager_ref.current_shop_player = 2
             self.total_wins.p1 += 1
             if (self.total_wins.p1 > self.wins_needed) then
                 self.game_manager_ref.game_winner = 1
@@ -55,12 +58,14 @@ function round_manager:round_winner(winner)
             end
         end
         if (winner == 2) then
+			self.game_manager_ref.menu_manager_ref.current_shop_player = 1
             self.total_wins.p2 += 1
             if (self.total_wins.p2 > self.wins_needed) then
                 self.game_manager_ref.game_winner = 2
                 self.game_manager_ref.set_state(4)
             end
         end
+		self.round_winners[self.cur_round - 1] = winner
         self:end_round()
     end
 end

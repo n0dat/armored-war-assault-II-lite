@@ -20,7 +20,9 @@ function game_manager:new()
 		round_manager_ref,
 		players_set = false,
 		setting_offset = 0,
-		last_player_turn = -1
+		last_player_turn = -1,
+		p1_shot = 0,
+		p2_shot = 0
 	}
 	setmetatable(new_obj, game_manager)
 	return new_obj
@@ -43,6 +45,8 @@ function game_manager:reset_all(typec)
 	self.max_x = 255
 	self.players_set = false
 	self.last_player_turn = -1
+	self.p1_shot = 0
+	self.p2_shot = 0
 
 	if (typec != nil) then
 		if (typec == 1) then
@@ -158,11 +162,13 @@ function game_manager:update()
 			self.menu_manager_ref.menu_open = false
 		end
 	else
-		if (btnp(4)) then
-			if (self.player_turn == 1) then
+		if (self.projectile_manager_ref.projectiles != nil) then
+			if (self.p1_shot == 1 and self.p2_shot == 0) then
 				self.player_turn = 2
-			else
+				self.p1_shot = 0
+			elseif (self.p1_shot == 0 and self.p2_shot == 1) then
 				self.player_turn = 1
+				self.p2_shot = 0
 			end
 		end
 		if (btnp(🅾️, 1)) then

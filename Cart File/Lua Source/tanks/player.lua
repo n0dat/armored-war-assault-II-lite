@@ -33,9 +33,12 @@ function player:new(sprite, init_speed, sprite_col, init_game_manager_ref, p_num
 		shot_type = 1,
 		can_move = true,
 		health = 100,
+		armor = 30,
+		has_armor = true,
 		player_no = p_num,
 		money = 0,
 		points = 0,
+		fuel = 50,
 		cm_ref
 	}
 	-- shot type = 1 is standard single bomb
@@ -62,6 +65,9 @@ function player:reset()
 	self.health = 100
 	self.money = 0
 	self.points = 0
+	self.has_armor = true
+	self.armor = 30
+	self.fuel = 50
 end
 
 function player:update_money(cost)
@@ -92,6 +98,12 @@ end
 function player:shoot()
 	if (btnp(5)) then
 		if (self.x > self.cm_ref.camera.cam_x and self.x < self.cm_ref.camera.cam_x + 127) then
+			if (self.player_no == 1) then
+				self.game_manager_ref.p1_shot = 1
+			elseif (self.player_no == 2) then
+				self.game_manager_ref.p2_shot = 1
+			end
+
 			if (not self.facing_left) then
 				sfx(1)
 				self.game_manager_ref.projectile_manager_ref:spawn_projectile(self.barrelx, self.barrely - self.barrel_rise, self.shot_power*cos(self.angle*(1/360)), self.shot_power*sin(self.angle*(1/360)), 2, 1)
