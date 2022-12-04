@@ -18,7 +18,7 @@ __lua__
 
 -- 1 = camera coordinates, level, state, game winner
 -- 2 = player 1 money and points, player 2 money and points
-debug = 2
+debug = 1
 
 function _init()
 
@@ -50,7 +50,6 @@ function _init()
 	game_manager_obj.projectile_manager_ref.camera_manager_ref = game_manager_obj.camera_manager_ref
 
 	game_manager_obj.level_manager_ref:init_levels()
-	game_manager_obj.level_manager_ref.cur_level = 1
 	game_manager_obj:set_players()
 
 	--game_manager_obj.round_manager_ref:set_total_rounds(2)

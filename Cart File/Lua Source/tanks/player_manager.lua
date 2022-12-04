@@ -56,6 +56,12 @@ function player_manager:update()
                 self.game_manager_ref.camera_manager_ref:reset()
                 self.game_manager_ref.round_manager_ref.cur_round += 1
                 self.game_manager_ref.level_manager_ref.cur_level += 1
+                if (self.game_manager_ref.setting_offset != 1) then
+                    --
+                    if (self.game_manager_ref.level_manager_ref.cur_level > 8) then
+                        self.game_manager_ref.level_manager_ref.cur_level = 1
+                    end
+                end
 
                 if (i == 1) then
                     self.game_manager_ref.player_turn = 2

@@ -3,8 +3,7 @@
 -----------------
  
  = PLAYER =
-- Player Points
-  + (add for hit) (compare for round win)
+
 - Player Armor / Shield
 - Use kits / power-ups
   + shield replenishes shield
@@ -15,16 +14,14 @@
  = WORLD =
 - Select a random level from the setting pool,
 - if rounds > 4 then move into next setting
-- Projecties need origin player to keep track
-- of who hit who.
+
 
 = MENUS = 
 - Shop at end of round
 - Allow players to use kits at mid-round
 - (with pause menu maybe?)
 - Use player money to buy items
-- Choose the settings at main menu
-- Choose number of rounds at main menu
+
 
 - When showing the shop menu at end of round, we need to disable player controls
 - Then use the arrow keys and z or x to select an item \ kit \ upgrade to buy
@@ -38,4 +35,7 @@
 
 - Player Currency
   + (deduce for purchase) (add for hit)
-
+- Player Points
+  + (add for hit) (compare for round win)
+- Choose the settings at main menu
+- Choose number of rounds at main menu
