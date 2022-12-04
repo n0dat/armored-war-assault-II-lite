@@ -6,6 +6,7 @@ function menu_manager:new(init_game_manager_ref)
 	-- pause = 2
 	-- end game = 3
 	-- shop = 4
+	-- controls = 4
 	local new_obj = {
 		current_menu = 1,
 		game_manager_ref = init_game_manager_ref,
@@ -23,7 +24,8 @@ function menu_manager:new(init_game_manager_ref)
 		mouse_sprites = {clicked = 0, unclicked = 16},
 		mouse_pos = {x = 0, y = 0},
 		player1_purchased = {armor = false, fuel = false, health = false, ammo = false, cluster = false},
-		player2_purchased = {armor = false, fuel = false, health = false, ammo = false, cluster = false}
+		player2_purchased = {armor = false, fuel = false, health = false, ammo = false, cluster = false},
+		change_enabled = true
 	}
 	setmetatable(new_obj, menu_manager)
 	return new_obj
@@ -39,6 +41,7 @@ function menu_manager:reset(typec)
 	self.current_menu = 1
 	self.shop_selection = 0
 	self.current_shop_player = 1
+	self.change_enabled = true
 	self.mouse_pos = {}
 	if (typec != nil) then
 		if (typec == 1) then
@@ -59,91 +62,93 @@ function menu_manager:update()
 	self.mouse_pos.x = (self.game_manager_ref.camera_manager_ref.camera.cam_x + stat(32) - 1)
 	self.mouse_pos.y = (stat(33) - 1)
 
-	--if (btn(❎, 1)) then
-		if (self.current_menu == 1) then
+	if (self.current_menu == 1) then
 
-			if (btn(❎, 1)) then
-				pal(1, 1, 1)
-				pal(5, 5, 1)
-				pal(3, 3, 1)
-				pal(11, 11, 1)
-				pal(10, 10, 1)
-				pal(9, 9, 1)
-				pal(7, 7, 1)
-				self.intro_over = true
-				pal(0, 1, 1)
-				pal(0, 0, 1)
-				pal()
-				palt(2, true)
-				palt(0, false)
-				self.game_manager_ref:set_state(3)
-				self.current_menu = 3
-				self.game_manager_ref.round_manager_ref:set_total_rounds(self.rounds)
-				if (self.setting == 1) then
-					self.game_manager_ref.setting_offset = 1
-					self.game_manager_ref.level_manager_ref.cur_level = 1
-				else
-					self.game_manager_ref.setting_offset = 5
-					self.last_setting_selection = 5
-					self.game_manager_ref.level_manager_ref.cur_level = 5
-				end
-			end
+		if (btnp(🅾️, 0)) then
+			self.current_menu = 5
+			return
+		end
 
-			if (btnp(⬇️, 0) or btnp(⬆️, 0)) then
-				if (self.current_selection == 1) then
-					self.current_selection = 2
-				else
-					self.current_selection = 1
-				end
-			end
-
-			if (btnp(➡️, 0)) then
-				if (self.current_selection == 1) then
-					self.rounds += 1
-					if (self.rounds > 8) then
-						self.rounds = 1
-					end
-				else
-					if (self.setting == 1) then
-						self.setting = 2
-					else
-						self.setting = 1
-					end
-				end
-			end
-
-			if (btnp(⬅️, 0)) then
-				if (self.current_selection == 1) then
-					self.rounds -= 1
-					if (self.rounds < 1) then
-						self.rounds = 8
-					end
-				else
-					if (self.setting == 1) then
-						self.setting = 2
-					else
-						self.setting = 1
-					end
-				end
-			end
-
-		elseif (self.current_menu == 2) then
-			if (btn(❎, 1)) then
-				pal(1, 1, 1)
-				pal(5, 5, 1)
-				pal(3, 3, 1)
-				pal(11, 11, 1)
-				pal(10, 10, 1)
-				pal(9, 9, 1)
-				pal(7, 7, 1)
-				pal(0, 1, 1)
-				pal(1, 1, 1)
-				pal()
-				palt(2, true)
-				self.game_manager_ref:set_state(3)
+		if (btnp(❎, 1)) then
+			pal(1, 1, 1)
+			pal(5, 5, 1)
+			pal(3, 3, 1)
+			pal(11, 11, 1)
+			pal(10, 10, 1)
+			pal(9, 9, 1)
+			pal(7, 7, 1)
+			self.intro_over = true
+			pal(0, 1, 1)
+			pal(0, 0, 1)
+			pal()
+			palt(2, true)
+			palt(0, false)
+			self.game_manager_ref:set_state(3)
+			self.current_menu = 3
+			self.game_manager_ref.round_manager_ref:set_total_rounds(self.rounds)
+			if (self.setting == 1) then
+				self.game_manager_ref.setting_offset = 1
+				self.game_manager_ref.level_manager_ref.cur_level = 1
+			else
+				self.game_manager_ref.setting_offset = 5
+				self.last_setting_selection = 5
+				self.game_manager_ref.level_manager_ref.cur_level = 5
 			end
 		end
-	--end
+
+		if (btnp(⬇️, 0) or btnp(⬆️, 0)) then
+			if (self.current_selection == 1) then
+				self.current_selection = 2
+			else
+				self.current_selection = 1
+			end
+		end
+
+		if (btnp(➡️, 0)) then
+			if (self.current_selection == 1) then
+				self.rounds += 1
+				if (self.rounds > 8) then
+					self.rounds = 1
+				end
+			else
+				if (self.setting == 1) then
+					self.setting = 2
+				else
+					self.setting = 1
+				end
+			end
+		end
+
+		if (btnp(⬅️, 0)) then
+			if (self.current_selection == 1) then
+				self.rounds -= 1
+				if (self.rounds < 1) then
+					self.rounds = 8
+				end
+			else
+				if (self.setting == 1) then
+					self.setting = 2
+				else
+					self.setting = 1
+				end
+			end
+		end
+	elseif (self.current_menu == 2) then
+		if (btn(❎, 1)) then
+			pal(1, 1, 1)
+			pal(5, 5, 1)
+			pal(3, 3, 1)
+			pal(11, 11, 1)
+			pal(10, 10, 1)
+			pal(9, 9, 1)
+			pal(7, 7, 1)
+			pal(0, 1, 1)
+			pal(1, 1, 1)
+			pal()
+			palt(2, true)
+			self.game_manager_ref:set_state(3)
+		end
+	end
 
 	if (btn(❎, 0) and self.current_menu == 3) then
 		self.game_manager_ref:reset_all()
@@ -262,7 +267,7 @@ function menu_manager:update()
 				if (self.current_shop_player == 1) then
 					if (self.player1_purchased.health == false and self.game_manager_ref.player_manager_ref.players[1].money >= self.item_costs.health) then
 						self.game_manager_ref.player_manager_ref.players[1]:update_money(-self.item_costs.health)
-						self.game_manager_ref.player_manager_ref.players[1].health += self.item_benefits.health
+						self.game_manager_ref.player_manager_ref.players[1].health_packs += 1 --self.item_benefits.health
 						self.player1_purchased.health = true
 						sfx(2)
 					else
@@ -271,7 +276,7 @@ function menu_manager:update()
 				else
 					if (self.player2_purchased.health == false and self.game_manager_ref.player_manager_ref.players[2].money >= self.item_costs.health) then
 						self.game_manager_ref.player_manager_ref.players[2]:update_money(-self.item_costs.health)
-						self.game_manager_ref.player_manager_ref.players[2].health += self.item_benefits.health
+						self.game_manager_ref.player_manager_ref.players[2].health_packs += 1 --self.item_benefits.health
 						self.player2_purchased.health = true
 						sfx(2)
 					else
@@ -324,16 +329,22 @@ function menu_manager:update()
 					end
 				end
 			--elseif (self.shop_selection == 6) then
-			elseif (self.shop_selection == 5) then
+			elseif (self.shop_selection == 5 and self.change_enabled) then
 				sfx(3)
 				if (self.current_shop_player == 1) then
 					self.current_shop_player = 2
 				else
 					self.current_shop_player = 1
 				end
+				self.change_enabled = false
 			end
 		end
+	end
 
+	if (self.current_menu == 5) then
+		if (btnp(🅾️, 0)) then
+			self.current_menu = 1
+		end
 	end
 
 end
@@ -343,6 +354,8 @@ function menu_manager:draw()
 		rectfill(self.game_manager_ref.camera_manager_ref.camera.cam_x + 20, 35, self.game_manager_ref.camera_manager_ref.camera.cam_x + 105, 79, 0)
 		rect(self.game_manager_ref.camera_manager_ref.camera.cam_x + 20, 35, self.game_manager_ref.camera_manager_ref.camera.cam_x + 105, 79, 7)
 		rect(self.game_manager_ref.camera_manager_ref.camera.cam_x + 32, 62, self.game_manager_ref.camera_manager_ref.camera.cam_x + 92, 62, 7)
+
+		print("controls - 🅾️", self.game_manager_ref.camera_manager_ref.camera.cam_x + 2, 2, 7)
 
 		print("armored war assault", self.game_manager_ref.camera_manager_ref.camera.cam_x + 25, 40, 7)
 		print("ii lite", self.game_manager_ref.camera_manager_ref.camera.cam_x + 50, 50, 7)
@@ -434,7 +447,14 @@ function menu_manager:draw()
 		elseif (stat(34) == 1) then
 			spr(self.mouse_sprites.unclicked, self.mouse_pos.x, self.mouse_pos.y)
 		end
-
+	elseif (self.current_menu == 5) then
+		x = self.game_manager_ref.camera_manager_ref.camera.cam_x + 6
+		y = 8
+		print("q to start game and close shop", x, y, 7)
+		print("⬆️⬇️⬅️➡️ rounds and setting", x, y + 8, 7)
+		print("❎ to shoot", x, y + 16, 7)
+		print("🅾️ to use health pack", x, y + 24, 7)
+		print("mouse to use shop", x, y + 32, 7)
 	end
 end
 

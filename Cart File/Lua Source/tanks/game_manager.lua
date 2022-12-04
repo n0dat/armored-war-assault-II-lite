@@ -149,6 +149,7 @@ function game_manager:update()
 		self.camera_manager_ref:reset()
 		self.players_set = false
 		self.intro_ref:reset()
+		--sfx(6)
 	end
 
 	if (self.players_set == false) then
@@ -176,5 +177,25 @@ function game_manager:update()
 			self.menu_manager_ref.menu_open = true
 		end
 	end
+	
+	if (btnp(🅾️, 0) and self.game_state == 3) then
+		if (self.player_turn == 1) then
+			if (self.player_manager_ref.players[1].health_packs > 0) then
+				self.player_manager_ref.players[1].health_packs -= 1
+				self.player_manager_ref.players[1].health += self.menu_manager_ref.item_benefits.health
+				sfx(5)
+			else
+				sfx(7)
+			end
+		elseif (self.player_turn == 2) then
+			if (self.player_manager_ref.players[2].health_packs > 0) then
+				self.player_manager_ref.players[2].health_packs -= 1
+				self.player_manager_ref.players[2].health += self.menu_manager_ref.item_benefits.health
+				sfx(5)
+			else
+				sfx(7)
+			end
 
+		end
+	end
 end

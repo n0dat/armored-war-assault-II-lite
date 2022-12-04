@@ -9,7 +9,7 @@ player.__index = player
 --Player constructor
 function player:new(sprite, init_speed, sprite_col, init_game_manager_ref, p_num) --Sprite collection and starting sprite along with starting coordinites.
 	local new_obj = {
-		health_packs = 10,
+		health_packs = 0,
 		x,
 		y,
 		bottom_left = {

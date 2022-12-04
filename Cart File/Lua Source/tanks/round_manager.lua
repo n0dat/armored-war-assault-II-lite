@@ -55,6 +55,7 @@ function round_manager:round_winner(winner)
             if (self.total_wins.p1 > self.wins_needed) then
                 self.game_manager_ref.game_winner = 1
                 self.game_manager_ref.set_state(4)
+                sfx(6)
             end
         end
         if (winner == 2) then
@@ -63,6 +64,7 @@ function round_manager:round_winner(winner)
             if (self.total_wins.p2 > self.wins_needed) then
                 self.game_manager_ref.game_winner = 2
                 self.game_manager_ref.set_state(4)
+                sfx(6)
             end
         end
 		self.round_winners[self.cur_round - 1] = winner
