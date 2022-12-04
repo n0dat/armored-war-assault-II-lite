@@ -65,13 +65,17 @@ function player_manager:update()
                     self.game_manager_ref.round_manager_ref:round_winner(1)
                 end
 
+                --self.game_manager_ref.player_turn = (i == 1) and 2 or 1
+
+                --self.game_manager_ref.round_manager_ref:round_winner(self.game_manager_ref.player_turn)
+
                 --self.game_manager_ref:set_players()
 
                 self.game_manager_ref.players_set = false
 
                 self:reset_player_health()
                 
-                return
+                --return
             end
         end
     end

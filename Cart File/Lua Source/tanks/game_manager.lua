@@ -19,6 +19,7 @@ function game_manager:new()
 		intro_ref,
 		round_manager_ref,
 		players_set = false,
+		setting_offset = 0,
 		last_player_turn = -1
 	}
 	setmetatable(new_obj, game_manager)
@@ -31,7 +32,7 @@ function game_manager:set_state(state)
 	end
 end
 
-function game_manager:reset_all()
+function game_manager:reset_all(typec)
 
 	-- game manager reset
 	self.game_phase = 1
@@ -43,15 +44,28 @@ function game_manager:reset_all()
 	self.players_set = false
 	self.last_player_turn = -1
 
+	if (typec != nil) then
+		if (typec == 1) then
+			self.setting_offset = self.menu_manager_ref.last_setting_selection
+		end
+	end
+
 	-- reset references
 	self.player_manager_ref:reset()
-	self.menu_manager_ref:reset()
 	self.projectile_manager_ref:reset()
 	self.round_manager_ref:reset() -- need to re-call set_total_rounds(rounds)
 	self.destruction_manager_ref:reset()
 	self.camera_manager_ref:reset()
 	self.intro_ref:reset()
 	self.level_manager_ref:reset()
+
+	if (typec != nil) then
+		if (typec == 1) then
+			self.menu_manager_ref:reset(typec)
+		end
+	end
+
+	self.level_manager_ref.cur_level = self.setting_offset
 
 	-- resetting the color palette
 	pal()
@@ -124,7 +138,7 @@ function game_manager:update()
 --		self.intro_ref:reset()
 	if (self.round_manager_ref.cur_round > self.round_manager_ref.total_rounds) then
 		self.round_manager_ref.cur_round = 1
-		self.level_manager_ref.cur_level = 1
+		self.level_manager_ref.cur_level = self.setting_offset
 		self:set_state(2)
 		self.menu_manager_ref.current_menu = 3
 		self.menu_manager_ref.menu_open = false

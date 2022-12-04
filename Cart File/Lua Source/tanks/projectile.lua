@@ -17,8 +17,7 @@ function projectile:new(init_x, init_y, init_vel_x, init_vel_y, init_spr, proj_t
         is_split = false,
         direction = proj_dir or 1,
         power = init_power or 10,
-        --damage = init_damage or 200
-        damage = 200
+        damage = init_damage or 20
     }
     setmetatable(new_obj, projectile)
     return new_obj

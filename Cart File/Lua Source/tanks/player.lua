@@ -34,6 +34,8 @@ function player:new(sprite, init_speed, sprite_col, init_game_manager_ref, p_num
 		can_move = true,
 		health = 100,
 		player_no = p_num,
+		money = 0,
+		points = 0,
 		cm_ref
 	}
 	-- shot type = 1 is standard single bomb
@@ -58,6 +60,20 @@ function player:reset()
 	self.shot_type = 1
 	self.can_move = true
 	self.health = 100
+	self.money = 0
+	self.points = 0
+end
+
+function player:update_money(cost)
+	if (cost != nil) then
+		self.money += cost
+	end
+end
+
+function player:update_points(new_points)
+	if (new_points != nil) then
+		self.points += new_points
+	end
 end
 
 function player:controls()

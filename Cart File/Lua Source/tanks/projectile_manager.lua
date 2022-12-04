@@ -61,9 +61,13 @@ function projectile_manager:update_projectiles_pos()
                 player2ref = self.game_manager_ref.player_manager_ref.players[2]
                 if (self.projectiles[i]:check_within_range(player1ref.x + 4, player1ref.y + 4)) then
                     player1ref.health -= self.projectiles[i].damage
+                    player1ref:update_money(self.projectiles[i].damage)
+                    player1ref:update_points(self.projectiles[i].damage)
                 end
                 if (self.projectiles[i]:check_within_range(player2ref.x + 4, player2ref.y + 4)) then
                     player2ref.health -= self.projectiles[i].damage
+                    player2ref:update_money(self.projectiles[i].damage)
+                    player2ref:update_points(self.projectiles[i].damage)
                 end
                 self.camera_manager_ref:pause_camera()
                 self:remove_projectile(i)

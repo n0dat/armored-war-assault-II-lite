@@ -16,6 +16,10 @@ __lua__
 #include level_manager.lua
 #include round_manager.lua
 
+-- 1 = camera coordinates, level, state, game winner
+-- 2 = player 1 money and points, player 2 money and points
+debug = 2
+
 function _init()
 
 	game_manager_obj = game_manager:new()
@@ -49,12 +53,11 @@ function _init()
 	game_manager_obj.level_manager_ref.cur_level = 1
 	game_manager_obj:set_players()
 
-	game_manager_obj.round_manager_ref:set_total_rounds(2)
-	game_manager_obj.round_manager_ref.wins_needed = flr(game_manager_obj.round_manager_ref.total_rounds / 2)
+	--game_manager_obj.round_manager_ref:set_total_rounds(2)
+	--game_manager_obj.round_manager_ref.wins_needed = flr(game_manager_obj.round_manager_ref.total_rounds / 2)
 
 	game_manager_obj.camera_manager_ref:set_init_pos(game_manager_obj.camera_manager_ref.camera.cam_x, game_manager_obj.camera_manager_ref.camera.cam_y)
-
-
+	
 end
 
 function _update60()
@@ -65,7 +68,7 @@ function _update60()
 	end
 	-- this is the main menu state
 	if (game_manager_obj:get_state() == 2) then
-		game_manager_obj.menu_manager_ref:update(game_manager_obj)
+		game_manager_obj.menu_manager_ref:update()
 	end
 	-- this is the main game state
 	if (game_manager_obj:get_state() == 3) then
@@ -81,7 +84,8 @@ function _update60()
 	-- this is the end game state
 	if (game_manager_obj:get_state() == 4) then
 		--game_manager_obj:update()
-		game_manager_obj.menu_manager_ref:update(game_manager_obj)
+		game_manager_obj.menu_manager_ref.current_menu = 3
+		game_manager_obj.menu_manager_ref:update()
 	end
 end
 
@@ -90,20 +94,36 @@ function _draw()
 	if (game_manager_obj:get_state() == 1) then
 		cls(1)
 		game_manager_obj.intro_ref:draw()
-		print("state: "..game_manager_obj.game_state, game_manager_obj.camera_manager_ref.camera.cam_x, 24, 8)
-		print("level: "..game_manager_obj.level_manager_ref.cur_level, game_manager_obj.camera_manager_ref.camera.cam_x, 0, 8)
-		print("cam_x: "..game_manager_obj.camera_manager_ref.camera.cam_x, game_manager_obj.camera_manager_ref.camera.cam_x, 8, 8)
-		print("cam_y: "..game_manager_obj.camera_manager_ref.camera.cam_y, game_manager_obj.camera_manager_ref.camera.cam_x, 16, 8)
+		if (debug == 1) then
+			print("state: "..game_manager_obj.game_state, game_manager_obj.camera_manager_ref.camera.cam_x, 24, 8)
+			print("level: "..game_manager_obj.level_manager_ref.cur_level, game_manager_obj.camera_manager_ref.camera.cam_x, 0, 8)
+			print("cam_x: "..game_manager_obj.camera_manager_ref.camera.cam_x, game_manager_obj.camera_manager_ref.camera.cam_x, 8, 8)
+			print("cam_y: "..game_manager_obj.camera_manager_ref.camera.cam_y, game_manager_obj.camera_manager_ref.camera.cam_x, 16, 8)
+		end
+		if (debug == 2) then
+			print("p1 money: "..game_manager_obj.player_manager_ref.players[1].money, game_manager_obj.camera_manager_ref.camera.cam_x, 0, 8)
+			print("p1 points: "..game_manager_obj.player_manager_ref.players[1].points, game_manager_obj.camera_manager_ref.camera.cam_x, 8, 8)
+			print("p2 money: "..game_manager_obj.player_manager_ref.players[2].money, game_manager_obj.camera_manager_ref.camera.cam_x, 16, 8)
+			print("p2 points: "..game_manager_obj.player_manager_ref.players[2].points, game_manager_obj.camera_manager_ref.camera.cam_x, 24, 8)
+		end
 	end
 	-- this is the main menu state
 	if (game_manager_obj:get_state() == 2) then
 		cls(1)
 		pal()
 		game_manager_obj.menu_manager_ref:draw()
-		print("state: "..game_manager_obj.game_state, game_manager_obj.camera_manager_ref.camera.cam_x, 24, 8)
-		print("level: "..game_manager_obj.level_manager_ref.cur_level, game_manager_obj.camera_manager_ref.camera.cam_x, 0, 8)
-		print("cam_x: "..game_manager_obj.camera_manager_ref.camera.cam_x, game_manager_obj.camera_manager_ref.camera.cam_x, 8, 8)
-		print("cam_y: "..game_manager_obj.camera_manager_ref.camera.cam_y, game_manager_obj.camera_manager_ref.camera.cam_x, 16, 8)
+		if (debug == 1) then
+			print("state: "..game_manager_obj.game_state, game_manager_obj.camera_manager_ref.camera.cam_x, 24, 8)
+			print("level: "..game_manager_obj.level_manager_ref.cur_level, game_manager_obj.camera_manager_ref.camera.cam_x, 0, 8)
+			print("cam_x: "..game_manager_obj.camera_manager_ref.camera.cam_x, game_manager_obj.camera_manager_ref.camera.cam_x, 8, 8)
+			print("cam_y: "..game_manager_obj.camera_manager_ref.camera.cam_y, game_manager_obj.camera_manager_ref.camera.cam_x, 16, 8)
+		end
+		if (debug == 2) then
+			print("p1 money: "..game_manager_obj.player_manager_ref.players[1].money, game_manager_obj.camera_manager_ref.camera.cam_x, 0, 8)
+			print("p1 points: "..game_manager_obj.player_manager_ref.players[1].points, game_manager_obj.camera_manager_ref.camera.cam_x, 8, 8)
+			print("p2 money: "..game_manager_obj.player_manager_ref.players[2].money, game_manager_obj.camera_manager_ref.camera.cam_x, 16, 8)
+			print("p2 points: "..game_manager_obj.player_manager_ref.players[2].points, game_manager_obj.camera_manager_ref.camera.cam_x, 24, 8)
+		end
 	end
 	-- this is the main game state
 	if (game_manager_obj:get_state() == 3) then
@@ -112,19 +132,35 @@ function _draw()
 		game_manager_obj.destruction_manager_ref:draw()
 		game_manager_obj.player_manager_ref:draw()
 		game_manager_obj.projectile_manager_ref:draw()
-		print("level: "..game_manager_obj.level_manager_ref.cur_level, game_manager_obj.camera_manager_ref.camera.cam_x, 0, 8)
-		print("cam_x: "..game_manager_obj.camera_manager_ref.camera.cam_x, game_manager_obj.camera_manager_ref.camera.cam_x, 8, 8)
-		print("cam_y: "..game_manager_obj.camera_manager_ref.camera.cam_y, game_manager_obj.camera_manager_ref.camera.cam_x, 16, 8)
-		print("prev game winner: "..game_manager_obj.game_winner, game_manager_obj.camera_manager_ref.camera.cam_x, 24, 8)
-		print("round: "..game_manager_obj.round_manager_ref.cur_round, game_manager_obj.camera_manager_ref.camera.cam_x, 32, 8)
+		if (debug == 1) then
+			print("level: "..game_manager_obj.level_manager_ref.cur_level, game_manager_obj.camera_manager_ref.camera.cam_x, 0, 8)
+			print("cam_x: "..game_manager_obj.camera_manager_ref.camera.cam_x, game_manager_obj.camera_manager_ref.camera.cam_x, 8, 8)
+			print("cam_y: "..game_manager_obj.camera_manager_ref.camera.cam_y, game_manager_obj.camera_manager_ref.camera.cam_x, 16, 8)
+			print("prev game winner: "..game_manager_obj.game_winner, game_manager_obj.camera_manager_ref.camera.cam_x, 24, 8)
+			print("round: "..game_manager_obj.round_manager_ref.cur_round, game_manager_obj.camera_manager_ref.camera.cam_x, 32, 8)
+		end
+		if (debug == 2) then
+			print("p1 money: "..game_manager_obj.player_manager_ref.players[1].money, game_manager_obj.camera_manager_ref.camera.cam_x, 0, 8)
+			print("p1 points: "..game_manager_obj.player_manager_ref.players[1].points, game_manager_obj.camera_manager_ref.camera.cam_x, 8, 8)
+			print("p2 money: "..game_manager_obj.player_manager_ref.players[2].money, game_manager_obj.camera_manager_ref.camera.cam_x, 16, 8)
+			print("p2 points: "..game_manager_obj.player_manager_ref.players[2].points, game_manager_obj.camera_manager_ref.camera.cam_x, 24, 8)
+		end
 	end
 	-- this is the end game state
 	if (game_manager_obj:get_state() == 4) then
 		cls(1)
 		game_manager_obj.menu_manager_ref:draw()
-		print("level: "..game_manager_obj.level_manager_ref.cur_level, game_manager_obj.camera_manager_ref.camera.cam_x, 0, 8)
-		print("cam_x: "..game_manager_obj.camera_manager_ref.camera.cam_x, game_manager_obj.camera_manager_ref.camera.cam_x, 8, 8)
-		print("cam_y: "..game_manager_obj.camera_manager_ref.camera.cam_y, game_manager_obj.camera_manager_ref.camera.cam_x, 16, 8)
+		if (debug == 1) then
+			print("level: "..game_manager_obj.level_manager_ref.cur_level, game_manager_obj.camera_manager_ref.camera.cam_x, 0, 8)
+			print("cam_x: "..game_manager_obj.camera_manager_ref.camera.cam_x, game_manager_obj.camera_manager_ref.camera.cam_x, 8, 8)
+			print("cam_y: "..game_manager_obj.camera_manager_ref.camera.cam_y, game_manager_obj.camera_manager_ref.camera.cam_x, 16, 8)
+		end
+		if (debug == 2) then
+			print("p1 money: "..game_manager_obj.player_manager_ref.players[1].money, game_manager_obj.camera_manager_ref.camera.cam_x, 0, 8)
+			print("p1 points: "..game_manager_obj.player_manager_ref.players[1].points, game_manager_obj.camera_manager_ref.camera.cam_x, 8, 8)
+			print("p2 money: "..game_manager_obj.player_manager_ref.players[2].money, game_manager_obj.camera_manager_ref.camera.cam_x, 16, 8)
+			print("p2 points: "..game_manager_obj.player_manager_ref.players[2].points, game_manager_obj.camera_manager_ref.camera.cam_x, 24, 8)
+		end
 	end
 end
 
@@ -153,12 +189,12 @@ __gfx__
 000000000000000000000000000000000000000000000000000000000000000000000000000000000005b533395b500000000000333cccccccccc33300000000
 0000000000000000000000000000000000000000000000000000000000000000000000000000000000005911331100000000000033cccccccccccc3300000000
 000000000000000000000000000000000000000000000000000000000000000000000000000000000000531733170000000000003cccccccccccccc300000000
-00000000000000000000000000555500000000a900666600067067000000000000000000000000000000531133115000000000003cccccccccccccc300000000
-00000000000000000000000005766650000005a066777766556756700000000000000000000000000005333333ab50000000000033cccccccccccc3300000000
-00000000000000000000000057666765088888806771177655565560000000000000000000000000005bb3333333b50000000000333cccccccccc33300000000
-0000000000000000000000005766676588e88e8867118876999a99a000000000000000000000000005bba3b3ab3aa500000000003333cccccccc333300000000
-00000000000000000000000056667665888ee88867188876999a99a000000000000000000000000005baabbaaab9aa500000000033333cccccc3333300000000
-00000000000000000000000005666650888ee88867788776999a99a0000000000000000000000000005ab9ab9ab5550000000000333333cccc33333300000000
+00000000000000000990000000555500000000a900666600067067000000000000000000000000000000531133115000000000003cccccccccccccc300000000
+00000000000000009999900005766650000005a066777766556756700000000000000000000000000005333333ab50000000000033cccccccccccc3300000000
+00000000000000009999990057666765088888806771177655565560000000000000000000000000005bb3333333b50000000000333cccccccccc33300000000
+0000000000000000999999005766676588e88e8867118876999a99a000000000000000000000000005bba3b3ab3aa500000000003333cccccccc333300000000
+00000000000000009999900056667665888ee88867188876999a99a000000000000000000000000005baabbaaab9aa500000000033333cccccc3333300000000
+00000000000000000990000005666650888ee88867788776999a99a0000000000000000000000000005ab9ab9ab5550000000000333333cccc33333300000000
 0000000000000000000000000056650088e88e8866777766999a99a0000000000000000000000000000555ba95500000000000003333333cc333333300000000
 000000000000000000000000000550000888888000666600999a99a0000000000000000000000000000000555000000000000000333333333333333300000000
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
