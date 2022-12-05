@@ -91,6 +91,9 @@ function game_manager:set_players()
 			x2 = self.level_manager_ref.levels[self.level_manager_ref.cur_level].p2.x
 			y2 = self.level_manager_ref.levels[self.level_manager_ref.cur_level].p2.y
 
+			player1_ref.facing_left = false
+			player2_ref.facing_left = true
+
 			player1_ref.x = x1
 			player1_ref.y = y1
 
@@ -100,7 +103,7 @@ function game_manager:set_players()
 			player1_ref.barrelx = x1 + 7
 			player1_ref.barrely = y1 + 2
 
-			player2_ref.barrelx = x2 + 7
+			player2_ref.barrelx = x2
 			player2_ref.barrely = y2 + 2
 
 			player1_ref.bottom_left.x = x1
@@ -114,7 +117,7 @@ function game_manager:set_players()
 			player2_ref.bottom_right.y = y2 + 7
 
 			self.player_manager_ref.players[1] = player1_ref
-			self.player_manager_ref.players[2] = player2_ref
+			self.player_manager_ref.players[2] = player2_ref			
 		end
 
 		self.camera_manager_ref:update()

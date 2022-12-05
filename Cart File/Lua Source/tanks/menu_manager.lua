@@ -13,7 +13,7 @@ function menu_manager:new(init_game_manager_ref)
 		menu_open = false,
 		shop_sprites = {armor = 51, fuel = 52, health = 53, ammo = 54, cluster = 55},
 		item_costs = {armor = 80, fuel = 30, health = 50, ammo = 20, cluster = 110},
-		item_benefits = {armor = 30, fuel = 200, health = 60, ammo = 7, cluster = {stype = 2, damage = 12}},
+		item_benefits = {armor = 30, fuel = 200, health = 70, ammo = 7, cluster = {stype = 2, damage = 12}},
 		start_game_selection = {forest = "forest", desert = "desert"},
 		setting = 1, -- 1 = forest   2 = desert
 		rounds = 1,
@@ -146,6 +146,7 @@ function menu_manager:update()
 			pal(1, 1, 1)
 			pal()
 			palt(2, true)
+			palt(0, false)
 			self.game_manager_ref:set_state(3)
 		end
 	end
@@ -163,6 +164,7 @@ function menu_manager:update()
 		pal(1, 1, 1)
 		pal()
 		palt(2, true)
+		palt(0, false)
 		self.game_manager_ref:set_state(2)
 		self.current_menu = 1
 	end
@@ -180,6 +182,7 @@ function menu_manager:update()
 		pal(1, 1, 1)
 		pal()
 		palt(2, true)
+		palt(0, false)
 		self.game_manager_ref:set_state(3)
 		self.current_menu = 3
 	end
@@ -196,19 +199,12 @@ function menu_manager:update()
 	elseif (self.current_menu == 4) then
 		if (self.mouse_pos.x >= 98.5 and self.mouse_pos.y >= 39 and self.mouse_pos.x <= 112.5 and self.mouse_pos.y <= 51) then
 			self.shop_selection = 1
---		end
-
 		elseif (self.mouse_pos.x >= 118.5 and self.mouse_pos.y >= 39 and self.mouse_pos.x <= 132.5 and self.mouse_pos.y <= 51) then
 			self.shop_selection = 2
-		--end
-
 		elseif (self.mouse_pos.x >= 138.5 and self.mouse_pos.y >= 39 and self.mouse_pos.x <= 152.5 and self.mouse_pos.y <= 51) then
 			self.shop_selection = 3
-		--end
-
 		elseif (self.mouse_pos.x >= 158.5 and self.mouse_pos.y >= 39 and self.mouse_pos.x <= 172.5 and self.mouse_pos.y <= 51) then
 			self.shop_selection = 4
-		--end
 		elseif (self.mouse_pos.x >= 159 and self.mouse_pos.y >= 70 and self.mouse_pos.x <= 169.5 and self.mouse_pos.y <= 76) then
 			self.shop_selection = 5
 		else
@@ -402,6 +398,7 @@ function menu_manager:draw()
 		--  fuel = 52
 		--  health = 53
 		--  ammo = 54
+		--	cluster = 55
 
 		-- drawing UI box
 		rectfill(self.game_manager_ref.camera_manager_ref.camera.cam_x + 15, 30, self.game_manager_ref.camera_manager_ref.camera.cam_x + 110, 84, 0)
@@ -414,6 +411,7 @@ function menu_manager:draw()
 		spr(self.shop_sprites.fuel, self.game_manager_ref.camera_manager_ref.camera.cam_x + 49, 45)
 		spr(self.shop_sprites.health, self.game_manager_ref.camera_manager_ref.camera.cam_x + 69, 45)
 		spr(self.shop_sprites.cluster, self.game_manager_ref.camera_manager_ref.camera.cam_x + 89, 45)
+		--spr(self.shop_sprites.ammo, self.game_manager_ref.camera_manager_ref.camera.cam_x + 89, 45)
 
 		spr(49, self.game_manager_ref.camera_manager_ref.camera.cam_x + 93, 73)
 
@@ -430,6 +428,9 @@ function menu_manager:draw()
 		elseif (self.shop_selection == 4) then
 			print("cost: "..self.item_costs.cluster, self.game_manager_ref.camera_manager_ref.camera.cam_x + 25, 74, 7)
 			rect(self.game_manager_ref.camera_manager_ref.camera.cam_x + 85, 42, self.game_manager_ref.camera_manager_ref.camera.cam_x + 100, 55, 7)
+		--elseif (self.shop_selection == 4) then
+			--print("cost: "..self.item_costs.ammo, self.game_manager_ref.camera_manager_ref.camera.cam_x + 25, 74, 7)
+			--rect(self.game_manager_ref.camera_manager_ref.camera.cam_x + 85, 42, self.game_manager_ref.camera_manager_ref.camera.cam_x + 100, 55, 7)
 		elseif (self.shop_selection == 5) then
 			spr(48, self.game_manager_ref.camera_manager_ref.camera.cam_x + 93, 73)
 		end

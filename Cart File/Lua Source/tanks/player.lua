@@ -39,7 +39,7 @@ function player:new(sprite, init_speed, sprite_col, init_game_manager_ref, p_num
 		player_no = p_num,
 		money = 0,
 		points = 0,
-		fuel = 350,
+		fuel = 500,
 		ammo = 10000,
 		cm_ref
 	}
@@ -70,7 +70,7 @@ function player:reset()
 	self.points = 0
 	self.has_armor = true
 	self.armor = 30
-	self.fuel = 350
+	self.fuel = 500
 	self.ammo = 10000
 end
 
@@ -208,7 +208,7 @@ function player:move_player_cords(dx, dy)
 		
 		self.bottom_right.y += dy
 		
-		if ((self.barrelx + dx) > 0 and (self.barrelx + dx) < 247.5) then
+		if ((self.barrelx + dx) > 0 and (self.barrelx + dx) < 254.5) then
 			self.barrelx += dx
 		end
 		self.barrely += dy
